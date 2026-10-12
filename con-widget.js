@@ -32,13 +32,23 @@ const money = (x, cur) => {
   catch (e) { return Math.round(x) + ' ' + (cur || ''); }
 };
 
-const bar = (pct, w, h) => {
+// Paw-print trail, walking left to right. Filled paws = progress.
+const PAW = [[12, 16.2, 5.2, 4.4], [5.2, 10.4, 2.2, 2.8], [9.4, 6, 2.2, 2.9], [14.6, 6, 2.2, 2.9], [18.8, 10.4, 2.2, 2.8]];
+const paws = (pct, w, h, count) => {
   const c = new DrawContext();
   c.size = new Size(w, h); c.opaque = false; c.respectScreenScale = true;
-  const t = new Path(); t.addRoundedRect(new Rect(0, 0, w, h), h / 2, h / 2);
-  c.addPath(t); c.setFillColor(TRACK); c.fillPath();
-  const f = new Path(); f.addRoundedRect(new Rect(0, 0, Math.max(h, w * Math.min(1, pct)), h), h / 2, h / 2);
-  c.addPath(f); c.setFillColor(WHITE); c.fillPath();
+  const cell = w / count, size = Math.min(cell * 0.95, h * 0.62), k = size / 24;
+  const filled = Math.round(Math.max(0, Math.min(1, pct)) * count);
+  for (let i = 0; i < count; i++) {
+    const ox = i * cell + (cell - size) / 2;
+    const oy = (h - size) / 2 + (i % 2 ? 1 : -1) * h * 0.17;
+    c.setFillColor(i < filled ? WHITE : TRACK);
+    PAW.forEach(([x, y, rx, ry]) => {
+      // rotate 90deg so toes point right
+      const cx = 24 - y, cy = x;
+      c.fillEllipse(new Rect(ox + (cx - ry) * k, oy + (cy - rx) * k, ry * 2 * k, rx * 2 * k));
+    });
+  }
   return c.getImage();
 };
 
@@ -80,9 +90,10 @@ if (!d) {
   left.addSpacer();
   txt(left, days > 0 ? String(days) : days === 0 ? 'Today' : 'Done', 40, 'bold', WHITE);
   txt(left, days === 1 ? 'day to go' : days > 0 ? 'days to go' : days === 0 ? 'con starts' : 'con is over', 13, 'semi', SOFT);
-  left.addSpacer(8);
-  left.addImage(bar(pct, medium ? 130 : 120, 6));
-  left.addSpacer(4);
+  left.addSpacer(6);
+  const trail = left.addImage(paws(pct, medium ? 150 : 128, 30, medium ? 9 : 8));
+  trail.imageSize = new Size(medium ? 150 : 128, 30);
+  left.addSpacer(2);
   txt(left, money(d.sv, d.c) + ' of ' + money(d.tp, d.c), 12, '', SOFT);
 
   if (medium && m) {
