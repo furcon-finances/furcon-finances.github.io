@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="_ds/nocturne-4cb930ee-d03f-4f20-bbb1-ae9b6a1f1239/styles.css">
+  <script src="_ds/nocturne-4cb930ee-d03f-4f20-bbb1-ae9b6a1f1239/_ds_bundle.js"></script>
+  <style>
+    html, body { margin: 0; background: #161826; color-scheme: dark; }
+    body { font-family: "Inter", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+    a { color: #9184d9; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+  </style>
+</helmet>
+<div style="min-height:100vh; color-scheme:dark; background:var(--color-bg); font-family:var(--font-body); font-weight:500; color:var(--color-text);">
+
+  <header style="background:linear-gradient(170deg, var(--color-accent-900) 0%, var(--color-bg) 100%); color:var(--color-text);">
+    <div style="max-width:1240px; margin:0 auto; padding:40px 24px 36px; display:flex; flex-wrap:wrap; align-items:flex-end; justify-content:space-between; gap:24px;">
+      <div style="display:flex; flex-direction:column; gap:14px; min-width:0;">
+        <span style="font:500 13px var(--font-body); letter-spacing:.18em; text-transform:uppercase; color:var(--color-accent-400);">Con budget planner</span>
+        <h1 style="margin:0; font-family:var(--font-heading); font-weight:500; font-size:clamp(34px,5vw,60px); line-height:1.12; text-wrap:balance;">{{ conName }}</h1>
+        <span style="font-size:16px; color:var(--color-neutral-400);">{{ headerSub }}</span>
+      </div>
+      <sc-if value="{{ showCountdown }}" hint-placeholder-val="{{ true }}">
+        <div style="display:flex; flex-direction:column; align-items:flex-end; gap:6px;">
+          <span style="font-family:var(--font-heading); font-weight:500; font-size:clamp(40px,5vw,64px); line-height:1; color:var(--color-accent-400);">{{ countdownNum }}</span>
+          <span style="font:500 12px var(--font-body); letter-spacing:.16em; text-transform:uppercase; color:var(--color-text);">{{ countdownLabel }}</span>
+        </div>
+      </sc-if>
+    </div>
+  </header>
+
+  <nav style="background:var(--color-bg); border-bottom:1px solid var(--color-divider);">
+    <div style="max-width:1240px; margin:0 auto; padding:14px 24px; display:flex; flex-wrap:wrap; gap:8px;">
+      <sc-for list="{{ steps }}" as="s" hint-placeholder-count="7">
+        <button onClick="{{ s.go }}" style="display:flex; align-items:center; gap:10px; height:40px; padding:0 14px; border-radius:var(--radius-md); border:1px solid {{ s.border }}; background:{{ s.bg }}; color:{{ s.fg }}; font:500 13px var(--font-body); letter-spacing:.06em; text-transform:uppercase; cursor:pointer;">
+          <span style="color:{{ s.numC }};">{{ s.num }}</span>
+          <span>{{ s.label }}</span>
+        </button>
+      </sc-for>
+    </div>
+  </nav>
+
+  <div style="max-width:1240px; margin:0 auto; padding:32px 24px 64px; display:flex; flex-wrap:wrap; align-items:flex-start; gap:24px;">
+    <main style="flex:999 1 560px; min-width:0; display:flex; flex-direction:column; gap:20px;">
+
+      <sc-if value="{{ isShort }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:12px 24px; padding:16px 20px; border-radius:var(--radius-lg); background:oklch(0.38 0.1 25); color:var(--color-text);">
+          <span style="font-size:16px; line-height:1.5;">{{ shortText }}</span>
+          <button onClick="{{ goSavings }}" class="btn btn-primary" style="padding:10px 18px;">Fix savings plan</button>
+        </div>
+      </sc-if>
+
+      <!-- STEP 1: CONVENTION -->
+      <sc-if value="{{ isStep0 }}" hint-placeholder-val="{{ true }}">
+        <div style="display:flex; flex-direction:column; gap:10px;">
+          <span style="font:500 13px var(--font-body); letter-spacing:.18em; text-transform:uppercase; color:var(--color-accent-400);">Step 01 of 07</span>
+          <h2 style="margin:0; font-family:var(--font-heading); font-weight:500; font-size:clamp(28px,3.4vw,42px); line-height:1.12; color:var(--color-text);">Pick your con</h2>
+          <p style="margin:0; font-size:17px; line-height:1.6; color:var(--color-neutral-400); max-width:62ch;">Start from a preset or set up your own. Presets fill in hotels, badge tiers and typical travel costs, which you can change.</p>
+        </div>
+        <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(210px,1fr)); gap:12px;">
+          <sc-for list="{{ conCards }}" as="c" hint-placeholder-count="4">
+            <button onClick="{{ c.pick }}" style="text-align:left; padding:20px; border-radius:var(--radius-lg); border:1px solid {{ c.border }}; background:{{ c.bg }}; color:{{ c.fg }}; cursor:pointer; display:flex; flex-direction:column; gap:8px; font-family:var(--font-body);">
+              <span style="font-family:var(--font-heading); font-weight:500; font-size:18px; line-height:1;">{{ c.name }}</span>
+              <span style="font-size:14px; color:{{ c.sub }};">{{ c.city }}</span>
+              <span style="font-size:14px; color:{{ c.sub }};">{{ c.dates }}</span>
+            </button>
+          </sc-for>
+        </div>
+        <div style="background:var(--color-surface); border:1px solid var(--color-neutral-800); border-radius:var(--radius-lg); padding:28px; display:flex; flex-direction:column; gap:20px;">
+          <h3 style="margin:0; font-family:var(--font-heading); font-weight:500; font-size:22px; line-height:1.12; color:var(--color-text);">Con details</h3>
+          <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:16px;">
+            <label style="display:flex; flex-direction:column; gap:6px;"><span style="font:500 12px/1.2 var(--font-body); letter-spacing:.12em; text-transform:uppercase; color:var(--color-neutral-400);">Con name</span><input value="{{ f.con_name.value }}" onChange="{{ f.con_name.on }}" style="width:100%; box-sizing:border-box; height:44px; padding:0 12px; border:1px solid var(--color-neutral-800); border-radius:var(--radius-md); font:500 16px var(--font-body); color:var(--color-text); background:var(--color-bg); outline:none;" style-focus="border-color:var(--color-accent-400);"></label>
+            <label style="display:flex; flex-direction:column; gap:6px;"><span style="font:500 12px/1.2 var(--font-body); letter-spacing:.12em; text-transform:uppercase; color:var(--color-neutral-400);">City</span><input value="{{ f.con_city.value }}" onChange="{{ f.con_city.on }}" style="width:100%; box-sizing:border-box; height:44px; padding:0 12px; border:1px solid var(--color-neutral-800); border-radius:var(--radius-md); font:500 16px var(--font-body); color:var(--color-text); background:var(--color-bg); outline:none;" style-focus="border-color:var(--color-accent-400);"></label>
+            <label style="display:flex; flex-direction:column; gap:6px;"><span style="font:500 12px/1.2 var(--font-body); letter-spacing:.12em; text-transform:uppercase; color:var(--color-neutral-400);">Con starts</span><input type="date" value="{{ f.con_start.value }}" onChange="{{ f.con_start.on }}" style="width:100%; box-sizing:border-box; height:44px; padding:0 12px; border:1px solid var(--color-neutral-800); border-radius:var(--radius-md); font:500 16px var(--font-body); color:var(--color-text); background:var(--color-bg); outline:none;" style-focus="border-color:var(--color-accent-400);"></label>
+            <label style="display:flex; flex-direction:column; gap:6px;"><span style="font:500 12px/1.2 var(--font-body); letter-spacing:.12em; text-transform:uppercase; color:var(--color-neutral-400);">Con ends</span><input type="date" value="{{ f.con_end.value }}" onChange="{{ f.con_end.on }}" style="width:100%; box-sizing:border-box; height:44px; padding:0 12px; border:1px solid var(--color-neutral-800); border-radius:var(--radius-md); font:500 16px var(--font-body); color:var(--color-text); background:var(--color-bg); outline:none;" style-focus="border-color:var(--color-accent-400);"></label>
+          </div>
+          <p style="margin:0; font-size:14px; line-height:1.5; color:var(--color-neutral-400);">{{ conNote }}</p>
+        </div>
+        <div style="background:var(--color-surface); border:1px solid var(--color-neutral-800); border-radius:var(--radius-lg); padding:28px; display:flex; flex-direction:column; gap:20px;">
+          <h3 style="margin:0; font-family:var(--font-heading); font-weight:500; font-size:22px; line-height:1.12; color:var(--color-text);">Your trip</h3>
+          <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:16px;">
+            <label style="display:flex; flex-direction:column; gap:6px;"><span style="font:500 12px/1.2 var(--font-body); letter-spacing:.12em; text-transform:uppercase; color:var(--color-neutral-400);">I leave home</span><input type="date" value="{{ f.arrive.value }}" onChange="{{ f.arrive.on }}" style="width:100%; box-sizing:border-box; height:44px; padding:0 12px; border:1px solid var(--color-neutral-800); border-radius:var(--radius-md); font:500 16px var(--font-body); color:var(--color-text); background:var(--color-bg); outline:none;" style-focus="border-color:var(--color-accent-400);"></label>
+            <label style="display:flex; flex-direction:column; gap:6px;"><span style="font:500 12px/1.2 var(--font-body); letter-spacing:.12em; text-transform:uppercase; color:var(--color-neutral-400);">I get back</span><input type="date" value="{{ f.depart.value }}" onChange="{{ f.depart.on }}" style="width:100%; box-sizing:border-box; height:44px; padding:0 12px; border:1px solid var(--color-neutral-800); border-radius:var(--radius-md); font:500 16px var(--font-body); color:var(--color-text); background:var(--color-bg); outline:none;" style-focus="border-color:var(--color-accent-400);"></label>
+            <label style="display:flex; flex-direction:column; gap:6px;"><span style="font:500 12px/1.2 var(--font-body); letter-spacing:.12em; text-transform:uppercase; color:var(--color-neutral-400);">My currency</span>
+              <select value="{{ f.currency.value }}" onChange="{{ f.currency.on }}" style="width:100%; box-sizing:border-box; height:44px; padding:0 10px; border:1px solid var(--color-neutral-800); border-radius:var(--radius-md); font:500 16px var(--font-body); color:var(--color-text); background:var(--color-bg);">
+                <option value="EUR">EUR (€)</option><option value="SEK">SEK (kr)</option><option value="DKK">DKK (kr)</option><option value="NOK">NOK (kr)</option><option value="GBP">GBP (£)</option><option value="CHF">CHF</option><option value="PLN">PLN (zł)</option><option value="USD">USD ($)</option>
+              </select>
+            </label>
+            <label style="display:flex; flex-direction:column; gap:6px;"><span style="font:500 12px/1.2 var(--font-body); letter-spacing:.12em; text-transform:uppercase; color:var(--color-neutral-400);">Currency at the con</span>
+              <select value="{{ f.con_cur.value }}" onChange="{{ f.con_cur.on }}" style="width:100%; box-sizing:border-box; height:44px; padding:0 10px; border:1px solid var(--color-neutral-800); border-radius:var(--radius-md); font:500 16px var(--font-body); color:var(--color-text); background:var(--color-bg);">
+                <option value="EUR">EUR (€)</option><option value="SEK">SEK (kr)</option><option value="DKK">DKK (kr)</option><option value="NOK">NOK (kr)</option><option value="GBP">GBP (£)</option><option value="CHF">CHF</option><option value="PLN">PLN (zł)</option><option value="USD">USD ($)</option>
+              </select>
+            </label>
+            <sc-if value="{{ showLocal }}" hint-placeholder-val="{{ true }}">
+              <label style="display:flex; flex-direction:column; gap:6px;"><span style="font:500 12px/1.2 var(--font-body); letter-spacing:.12em; text-transform:uppercase; color:var(--color-neutral-400);">{{ rateLabel }}</span><input inputmode="decimal" value="{{ f.con_rate.value }}" onChange="{{ f.con_rate.on }}" style="width:100%; box-sizing:border-box; height:44px; padding:0 12px; border:1px solid var(--color-neutral-800); border-radius:var(--radius-md); font:500 16px var(--font-body); color:var(--color-text); background:var(--color-bg); outline:none;" style-focus="border-color:var(--color-accent-400);"></label>
+            </sc-if>
+          </div>
+          <div style="display:flex; flex-wrap:wrap; gap:16px 40px; padding:16px 20px; background:var(--color-bg); border-radius:var(--radius-md);">
+            <div style="display:flex; flex-direction:column; gap:4px;"><span style="font:500 12px var(--font-body); letter-spacing:.12em; text-transform:uppercase; color:var(--color-neutral-400);">Days away</span><span style="font-family:var(--font-heading); font-weight:500; font-size:24px; color:var(--color-text);">{{ dayCount }}</span></div>
+            <div style="display:flex; flex-direction:column; gap:4px;"><span style="font:500 12px var(--font-body); letter-spacing:.12em; text-transform:uppercase; color:var(--color-neutral-400);">Hotel nights</span><span style="font-family:var(--font-heading); font-weight:500; font-size:24px; color:var(--color-text);">{{ nights }}</span></div>
+            <div style="display:flex; flex-direction:column; gap:4px;"><span style="font:500 12px var(--font-body); letter-spacing:.12em; text-transform:uppercase; color:var(--color-neutral-400);">Con days</span><span style="font-family:var(--font-heading); font-weight:500; font-size:24px; color:var(--color-text);">{{ conDayCount }}</span></div>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- STEP 2: HOTEL -->
+      <sc-if value="{{ isStep1 }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex; flex-direction:column; gap:10px;">
+          <span style="font:500 13px var(--font-body); letter-spacing:.18em; text-transform:uppercase; color:var(--color-accent-400);">Step 02 of 07</span>
+          <h2 style="margin:0; font-family:var(--font-heading); font-weight:500; font-size:clamp(28px,3.4vw,42px); line-height:1.12; color:var(--color-text);">Where you'll stay</h2>
+          <p style="margin:0; font-size:17px; line-height:1.6; color:var(--color-neutral-400); max-width:62ch;">Choose a hotel and room. Nightly prices are placeholders, so enter what your booking actually costs.</p>
+        </div>
+        <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:12px;">
+          <sc-for list="{{ hotelOptions }}" as="h" hint-placeholder-count="4">
+            <button onClick="{{ h.pick }}" style="text-align:left; padding:20px; border-radius:var(--radius-lg); border:1px solid {{ h.border }}; background:{{ h.bg }}; color:{{ h.fg }}; cursor:pointer; display:flex; flex-direction:column; gap:8px; font-family:var(--font-body);">
+              <span style="font:500 11px var(--font-body); letter-spacing:.14em; text-transform:uppercase; color:{{ h.tagC }};">{{ h.tag }}</span>
+              <span style="font-size:17px; font-weight:600; line-height:1.3;">{{ h.name }}</span>
+              <span style="font-size:14px; color:{{ h.sub }};">{{ h.from }}</span>
+            </button>
+          </sc-for>
+        </div>
+        <div style="background:var(--color-surface); border:1px solid var(--color-neutral-800); border-radius:var(--radius-lg); padding:28px; display:flex; flex-direction:column; gap:20px;">
+          <h3 style="margin:0; font-family:var(--font-heading); font-weight:500; font-size:22px; line-height:1.12; color:var(--color-text);">Room</h3>
+          <sc-if value="{{ hasRooms }}" hint-placeholder-val="{{ true }}">
+            <div style="display:flex; flex-wrap:wrap; gap:8px;">
+              <sc-for list="{{ rooms }}" as="r" hint-placeholder-count="3">
+                <button onClick="{{ r.pick }}" style="display:flex; flex-direction:column; align-items:flex-start; gap:2px; padding:10px 16px; border-radius:var(--radius-md); border:1px solid {{ r.border }}; background:{{ r.bg }}; color:{{ r.fg }}; cursor:pointer; font-family:var(--font-body);">
+                  <span style="font-size:15px; font-weight:600;">{{ r.label }}</span>
+                  <span style="font-size:13px; color:{{ r.sub }};">{{ r.meta }}</span>
+                </button>
+              </sc-for>
+            </div>
+          </sc-if>
+          <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:16px;">
+            <sc-if value="{{ isCustomHotel }}" hint-placeholder-val="{{ false }}">
+              <label style="display:flex; flex-direction:column; gap:6px;"><span style="font:500 12px/1.2 var(--font-body); letter-spacing:.12em; text-transform:uppercase; color:var(--color-neutral-400);">Hotel name</span><input value="{{ f.hotel_name.value }}" onChange="{{ f.hotel_name.on }}" placeholder="Where are you staying?" style="width:100%; box-sizing:border-box; height:44px; padding:0 12px; border:1px solid var(--color-neutral-800); border-radius:var(--radius-md); font:500 16px var(--font-body); color:var(--color-text); background:var(--color-bg); outline:none;" style-focus="border-color:var(--color-accent-400);"></label>
+            </sc-if>
+            <label style="display:flex; flex-direction:column; gap:6px;"><span style="font:500 12px/1.2 var(--font-body); letter-spacing:.12em; text-transform:uppercase; color:var(--color-neutral-400);">Room price per night</span><input inputmode="decimal" value="{{ f.hotel_price.value }}" onChange="{{ f.hotel_price.on }}" style="width:100%; box-sizing:border-box; height:44px; padding:0 12px; border:1px solid var(--color-neutral-800); border-radius:var(--radius-md); font:500 16px var(--font-body); color:var(--color-text); background:var(--color-bg); outline:none;" style-focus="border-color:var(--color-accent-400);"></label>
+            <label style="display:flex; flex-direction:column; gap:6px;"><span style="font:500 12px/1.2 var(--font-body); letter-spacing:.12em; text-transform:uppercase; color:var(--color-neutral-400);">People sharing the room</span><input inputmode="numeric" value="{{ f.hotel_split.value }}" onChange="{{ f.hotel_split.on }}" style="width:100%; box-sizing:border-box; height:44px; padding:0 12px; border:1px solid var(--color-neutral-800); border-radius:var(--radius-md); font:500 16px var(--font-body); color:var(--color-text); background:var(--color-bg); outline:none;" style-focus="border-color:var(--color-accent-400);"></label>
+          </div>
+          <div style="display:flex; flex-wrap:wrap; align-items:center; gap:16px 40px; padding:16px 20px; background:var(--color-bg); border-radius:var(--radius-md);">
+            <div style="display:flex; flex-direction:column; gap:4px;"><span style="font:500 12px var(--font-body); letter-spacing:.12em; text-transform:uppercase; color:var(--color-neutral-400);">{{ hotelCalc }}</span><span style="font-family:var(--font-heading); font-weight:500; font-size:24px; color:var(--color-text);">{{ hotelFull }}</span></div>
+            <div style="display:flex; flex-direction:column; gap:4px;"><span style="font:500 12px var(--font-body); letter-spacing:.12em; text-transform:uppercase; color:var(--color-neutral-400);">My share</span><span style="font-family:var(--font-heading); font-weight:500; font-size:24px; color:var(--color-text);">{{ hotelShare }}</span></div>
+            <button onClick="{{ hotelPaid.toggle }}" style="margin-left:auto; height:38px; padding:0 16px; border-radius:var(--radius-md); border:1px solid {{ hotelPaid.border }}; background:{{ hotelPaid.bg }}; color:{{ hotelPaid.fg }}; font:500 12px var(--font-body); letter-spacing:.08em; text-transform:uppercase; cursor:pointer;">{{ hotelPaid.label }}</button>
+          </div>
+          <p style="margin:0; font-size:14px; line-height:1.5; color:var(--color-neutral-400);">Nights come from your trip dates in step 01.</p>
+        </div>
+      </sc-if>
+
+      <!-- STEP 3: TRAVEL -->
+      <sc-if value="{{ isStep2 }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex; flex-direction:column; gap:10px;">
+          <span style="font:500 13px var(--font-body); letter-spacing:.18em; text-transform:uppercase; color:var(--color-accent-400);">Step 03 of 07</span>
+          <h2 style="margin:0; font-family:var(--font-heading); font-weight:500; font-size:clamp(28px,3.4vw,42px); line-height:1.12; color:var(--color-text);">Getting there</h2>
+          <p style="margin:0; font-size:17px; line-height:1.6; color:var(--color-neutral-400); max-width:62ch;">Pick how you travel. Each cost has its own split, so fuel can be split with the car and a ferry with everyone on board.</p>
+        </div>
+        <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:12px;">
+          <sc-for list="{{ modeCards }}" as="m" hint-placeholder-count="4">
+            <button onClick="{{ m.pick }}" style="text-align:left; padding:18px 20px; border-radius:var(--radius-lg); border:1px solid {{ m.border }}; background:{{ m.bg }}; color:{{ m.fg }}; cursor:pointer; display:flex; flex-direction:column; gap:6px; font-family:var(--font-body);">
+              <span style="font-family:var(--font-heading); font-weight:500; font-size:18px; line-height:1;">{{ m.label }}</span>
+              <span style="font-size:14px; line-height:1.4; color:{{ m.sub }};">{{ m.desc }}</span>
+            </button>
+          </sc-for>
+        </div>
+        <sc-if value="{{ isCar }}" hint-placeholder-val="{{ true }}">
+          <div style="background:var(--color-surface); border:1px solid var(--color-neutral-800); border-radius:var(--radius-lg); padding:28px; display:flex; flex-direction:column; gap:20px;">
+            <h3 style="margin:0; font-family:var(--font-heading); font-weight:500; font-size:22px; line-height:1.12; color:var(--color-text);">Fuel calculator</h3>
+            <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:16px;">
+              <label style="display:flex; flex-direction:column; gap:6px;"><span style="font:500 12px/1.2 var(--font-body); letter-spacing:.12em; text-transform:uppercase; color:var(--color-neutral-400);">Distance one way (km)</span><input inputmode="decimal" value="{{ f.car_distance.value }}" onChange="{{ f.car_distance.on }}" style="width:100%; box-sizing:border-box; height:44px; padding:0 12px; border:1px solid var(--color-neutral-800); border-radius:var(--radius-md); font:500 16px var(--font-body); color:var(--color-text); background:var(--color-bg); outline:none;" style-focus="border-color:var(--color-accent-400);"></label>
+              <label style="display:flex; flex-direction:column; gap:6px;"><span style="font:500 12px/1.2 var(--font-body); letter-spacing:.12em; text-transform:uppercase; color:var(--color-neutral-400);">Litres per 100 km</span><input inputmode="decimal" value="{{ f.car_usage.value }}" onChange="{{ f.car_usage.on }}" style="width:100%; box-sizing:border-box; height:44px; padding:0 12px; border:1px solid var(--color-neutral-800); border-radius:var(--radius-md); font:500 16px var(--font-body); color:var(--color-text); background:var(--color-bg); outline:none;" style-focus="border-color:var(--color-accent-400);"></label>
+              <label style="display:flex; flex-direction:column; gap:6px;"><span style="font:500 12px/1.2 var(--font-body); letter-spacing:.12em; text-transform:uppercase; color:var(--color-neutral-400);">Fuel price per litre</span><input inputmode="decimal" value="{{ f.car_price.value }}" onChange="{{ f.car_price.on }}" style="width:100%; box-sizing:border-box; height:44px; padding:0 12px; border:1px solid var(--color-neutral-800); border-radius:var(--radius-md); font:500 16px var(--font-body); color:var(--color-text); background:var(--color-bg); outline:none;" style-focus="border-color:var(--color-accent-400);"></label>
+              <label style="display:flex; flex-direction:column; gap:6px;"><span style="font:500 12px/1.2 var(--font-body); letter-spacing:.12em; text-transform:uppercase; color:var(--color-neutral-400);">Extra km driving there</span><input inputmode="decimal" value="{{ f.car_extra.value }}" onChange="{{ f.car_extra.on }}" style="width:100%; box-sizing:border-box; height:44px; padding:0 12px; border:1px solid var(--color-neutral-800); border-radius:var(--radius-md); font:500 16px var(--font-body); color:var(--color-text); background:var(--color-bg); outline:none;" style-focus="border-color:var(--color-accent-400);"></label>
+              <label style="display:flex; flex-direction:column; gap:6px;"><span style="font:500 12px/1.2 var(--font-body); letter-spacing:.12em; text-transform:uppercase; color:var(--color-neutral-400);">People splitting fuel</span><input inputmode="numeric" value="{{ f.car_split.value }}" onChange="{{ f.car_split.on }}" style="width:100%; box-sizing:border-box; height:44px; padding:0 12px; border:1px solid var(--color-neutral-800); border-radius:var(--radius-md); font:500 16px var(--font-body); color:var(--color-text); background:var(--color-bg); outline:none;" style-focus="border-color:var(--color-accent-400);"></label>
+            </div>
+            <div style="display:flex; flex-wrap:wrap; align-items:center; gap:16px 40px; padding:16px 20px; background:var(--color-bg); border-radius:var(--radius-md);">
+              <div style="display:flex; flex-direction:column; gap:4px;"><span style="font:500 12px var(--font-body); letter-spacing:.12em; text-transform:uppercase; color:var(--color-neutral-400);">{{ fuelCalc }}</span><span style="font-family:var(--font-heading); font-weight:500; font-size:24px; color:var(--color-text);">{{ fuelFull }}</span></div>
+              <div style="display:flex; flex-direction:column; gap:4px;"><span style="font:500 12px var(--font-body); letter-spacing:.12em; text-transform:uppercase; color:var(--color-neutral-400);">My share</span><span style="font-family:var(--font-heading); font-weight:500; font-size:24px; color:var(--color-text);">{{ fuelShare }}</span></div>
+              <button onClick="{{ fuelPaid.toggle }}" style="margin-left:auto; height:38px; padding:0 16px; border-radius:var(--radius-md); border:1px solid {{ fuelPaid.border }}; background:{{ fuelPaid.bg }}; color:{{ fuelPaid.fg }}; font:500 12px var(--font-body); letter-spacing:.08em; text-transform:uppercase; cursor:pointer;">{{ fuelPaid.label }}</button>
+            </div>
+          </div>
+        </sc-if>
+        <div style="background:var(--color-surface); border:1px solid var(--color-neutral-800); border-radius:var(--radius-lg); padding:28px; display:flex; flex-direction:column; gap:16px;">
+          <h3 style="margin:0; font-family:var(--font-heading); font-weight:500; font-size:22px; line-height:1.12; color:var(--color-text);">{{ travelListTitle }}</h3>
+          <div style="display:flex; flex-wrap:wrap; gap:10px; font:500 12px var(--font-body); letter-spacing:.12em; text-transform:uppercase; color:var(--color-neutral-400);">
+            <span style="flex:2 1 200px;">Item</span><span style="flex:1 1 100px;">Full cost</span><span style="flex:0 1 80px;">Split</span><span style="flex:0 0 100px;">My share</span><span style="flex:0 0 190px;"></span>
+          </div>
+          <sc-for list="{{ travelItems }}" as="it" hint-placeholder-count="3">
+            <div style="display:flex; flex-wrap:wrap; align-items:center; gap:10px; padding-top:12px; border-top:1px solid var(--color-neutral-800);">
+              <input value="{{ it.label }}" onChange="{{ it.onLabel }}" style="flex:2 1 200px; min-width:0; box-sizing:border-box; height:44px; padding:0 12px; border:1px solid var(--color-neutral-800); border-radius:var(--radius-md); font:500 16px var(--font-body); color:var(--color-text); background:var(--color-bg); outline:none;" style-focus="border-color:var(--color-accent-400);">
+              <input inputmode="decimal" value="{{ it.cost }}" onChange="{{ it.onCost }}" style="flex:1 1 100px; min-width:0; box-sizing:border-box; height:44px; padding:0 12px; border:1px solid var(--color-neutral-800); border-radius:var(--radius-md); font:500 16px var(--font-body); color:var(--color-text); background:var(--color-bg); outline:none;" style-focus="border-color:var(--color-accent-400);">
+              <input inputmode="numeric" value="{{ it.split }}" onChange="{{ it.onSplit }}" style="flex:0 1 80px; min-width:0; box-sizing:border-box; height:44px; padding:0 12px; border:1px solid var(--color-neutral-800); border-radius:var(--radius-md); font:500 16px var(--font-body); color:var(--color-text); background:var(--color-bg); outline:none;" style-focus="border-color:var(--color-accent-400);">
+              <span style="flex:0 0 100px; font-weight:600; color:var(--color-text);">{{ it.share }}</span>
+              <div style="flex:0 0 190px; display:flex; gap:8px; justify-content:flex-end;">
+                <button onClick="{{ it.toggle }}" style="height:38px; padding:0 14px; border-radius:var(--radius-md); border:1px solid {{ it.paidBorder }}; background:{{ it.paidBg }}; color:{{ it.paidFg }}; font:500 12px var(--font-body); letter-spacing:.08em; text-transform:uppercase; cursor:pointer;">{{ it.paidLabel }}</button>
+                <button onClick="{{ it.remove }}" style="height:38px; padding:0 10px; border:none; background:transparent; color:var(--color-neutral-400); font:500 12px var(--font-body); letter-spacing:.08em; text-transform:uppercase; cursor:pointer;" style-hover="color:var(--color-text);">Remove</button>
+              </div>
+            </div>
+          </sc-for>
+          <div style="display:flex; flex-wrap:wrap; gap:12px; align-items:center; justify-content:space-between; padding-top:12px; border-top:1px solid var(--color-neutral-800);">
+            <button onClick="{{ addTravel }}" class="btn btn-secondary" style="padding:10px 18px;">Add a cost</button>
+            <span style="font-size:15px; color:var(--color-neutral-400);">{{ travelSummary }}</span>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- STEP 4: DAILY -->
+      <sc-if value="{{ isStep3 }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex; flex-direction:column; gap:10px;">
+          <span style="font:500 13px var(--font-body); letter-spacing:.18em; text-transform:uppercase; color:var(--color-accent-400);">Step 04 of 07</span>
+          <h2 style="margin:0; font-family:var(--font-heading); font-weight:500; font-size:clamp(28px,3.4vw,42px); line-height:1.12; color:var(--color-text);">Daily spending</h2>
+          <p style="margin:0; font-size:17px; line-height:1.6; color:var(--color-neutral-400); max-width:62ch;">Set a budget per type of day. Every day uses its type's budget unless you change it in the day-by-day list. These costs are yours alone, never split.</p>
+        </div>
+        <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:12px;">
+          <sc-for list="{{ typeBoxes }}" as="t" hint-placeholder-count="3">
+            <div style="background:var(--color-surface); border:1px solid var(--color-neutral-800); border-radius:var(--radius-lg); padding:22px; display:flex; flex-direction:column; gap:12px;">
+              <div style="display:flex; justify-content:space-between; align-items:baseline; gap:8px;">
+                <span style="font-family:var(--font-heading); font-weight:500; font-size:18px; line-height:1; color:var(--color-text);">{{ t.label }}</span>
+                <span style="font-size:14px; color:var(--color-neutral-400);">{{ t.count }}</span>
+              </div>
+              <sc-for list="{{ t.fields }}" as="fd" hint-placeholder-count="5">
+                <label style="display:grid; grid-template-columns:minmax(0,1fr) 92px; align-items:center; gap:10px;">
+                  <span style="font-size:15px; color:var(--color-text);">{{ fd.label }}</span>
+                  <input inputmode="decimal" value="{{ fd.value }}" onChange="{{ fd.on }}" style="width:100%; box-sizing:border-box; height:40px; padding:0 10px; text-align:right; border:1px solid var(--color-neutral-800); border-radius:var(--radius-md); font:500 16px var(--font-body); color:var(--color-text); background:var(--color-bg); outline:none;" style-focus="border-color:var(--color-accent-400);">
+                </label>
+              </sc-for>
+              <div style="display:flex; justify-content:space-between; align-items:baseline; gap:8px; padding-top:10px; border-top:1px solid var(--color-neutral-800);">
+                <span style="font:500 12px var(--font-body); letter-spacing:.12em; text-transform:uppercase; color:var(--color-neutral-400);">Per day</span>
+                <span style="display:flex; flex-direction:column; align-items:flex-end;"><span style="font-weight:600; font-size:18px; color:var(--color-text);">{{ t.total }}</span><span style="font-size:13px; color:var(--color-neutral-400);">{{ t.local }}</span></span>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+        <div style="background:var(--color-surface); border:1px solid var(--color-neutral-800); border-radius:var(--radius-lg); padding:28px; display:flex; flex-direction:column; gap:16px;">
+          <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:baseline; gap:8px 24px;">
+            <h3 style="margin:0; font-family:var(--font-heading); font-weight:500; font-size:22px; line-height:1.12; color:var(--color-text);">Day by day</h3>
+            <span style="display:flex; align-items:center; gap:8px; font-size:14px; color:var(--color-neutral-400);"><span style="width:14px; height:14px; border-radius:var(--radius-sm); background:var(--color-accent-900); border:1px solid var(--color-accent);"></span>Changed from the default</span>
+          </div>
+          <div style="overflow-x:auto;">
+            <div style="min-width:880px; display:flex; flex-direction:column;">
+              <div style="display:grid; grid-template-columns:110px 150px repeat(5,minmax(76px,1fr)) 96px 70px; gap:8px; padding:0 0 10px; font:500 11px var(--font-body); letter-spacing:.1em; text-transform:uppercase; color:var(--color-neutral-400);">
+                <span>Day</span><span>Type</span><span style="text-align:right;">Food</span><span style="text-align:right;">Drinks</span><span style="text-align:right;">Snacks</span><span style="text-align:right;">Events</span><span style="text-align:right;">Misc</span><span style="text-align:right;">Total</span><span></span>
+              </div>
+              <sc-for list="{{ dayRows }}" as="d" hint-placeholder-count="8">
+                <div style="display:grid; grid-template-columns:110px 150px repeat(5,minmax(76px,1fr)) 96px 70px; gap:8px; align-items:center; padding:8px 0; border-top:1px solid var(--color-neutral-800);">
+                  <span style="font-weight:600; color:var(--color-text);">{{ d.label }}</span>
+                  <select value="{{ d.type }}" onChange="{{ d.onType }}" style="height:38px; padding:0 8px; border:1px solid var(--color-neutral-800); border-radius:var(--radius-md); font:500 14px var(--font-body); color:var(--color-text); background:var(--color-bg);">
+                    <option value="travel">Travel day</option><option value="early">Early / extra</option><option value="con">Con day</option>
+                  </select>
+                  <sc-for list="{{ d.cells }}" as="c" hint-placeholder-count="5">
+                    <input inputmode="decimal" value="{{ c.value }}" onChange="{{ c.on }}" style="width:100%; box-sizing:border-box; height:38px; padding:0 8px; text-align:right; border:1px solid {{ c.border }}; border-radius:var(--radius-md); font:500 15px var(--font-body); color:var(--color-text); background:{{ c.bg }}; outline:none;" style-focus="border-color:var(--color-accent-400);">
+                  </sc-for>
+                  <span style="text-align:right; font-weight:600; color:var(--color-text);">{{ d.totalF }}</span>
+                  <sc-if value="{{ d.hasOv }}" hint-placeholder-val="{{ false }}">
+                    <button onClick="{{ d.reset }}" style="height:32px; border:none; background:transparent; color:var(--color-accent-400); font:500 11px var(--font-body); letter-spacing:.08em; text-transform:uppercase; cursor:pointer;">Reset</button>
+                  </sc-if>
+                </div>
+              </sc-for>
+              <div style="display:grid; grid-template-columns:110px 150px repeat(5,minmax(76px,1fr)) 96px 70px; gap:8px; align-items:center; padding:12px 0 0; border-top:2px solid var(--color-accent-700); font-weight:600; color:var(--color-text);">
+                <span>Total</span><span></span>
+                <sc-for list="{{ catTotals }}" as="ct" hint-placeholder-count="5"><span style="text-align:right;">{{ ct }}</span></sc-for>
+                <span style="text-align:right;">{{ dailyTotalF }}</span><span></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- STEP 5: BADGE & EXTRAS -->
+      <sc-if value="{{ isStep4 }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex; flex-direction:column; gap:10px;">
+          <span style="font:500 13px var(--font-body); letter-spacing:.18em; text-transform:uppercase; color:var(--color-accent-400);">Step 05 of 07</span>
+          <h2 style="margin:0; font-family:var(--font-heading); font-weight:500; font-size:clamp(28px,3.4vw,42px); line-height:1.12; color:var(--color-text);">Badge &amp; extras</h2>
+          <p style="margin:0; font-size:17px; line-height:1.6; color:var(--color-neutral-400); max-width:62ch;">Choose your registration tier, set a Dealers' Den budget and add anything else you're planning to buy.</p>
+        </div>
+        <div style="background:var(--color-surface); border:1px solid var(--color-neutral-800); border-radius:var(--radius-lg); padding:28px; display:flex; flex-direction:column; gap:20px;">
+          <h3 style="margin:0; font-family:var(--font-heading); font-weight:500; font-size:22px; line-height:1.12; color:var(--color-text);">Registration tier</h3>
+          <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:12px;">
+            <sc-for list="{{ tierCards }}" as="t" hint-placeholder-count="3">
+              <button onClick="{{ t.pick }}" style="text-align:left; padding:18px 20px; border-radius:var(--radius-lg); border:1px solid {{ t.border }}; background:{{ t.bg }}; color:{{ t.fg }}; cursor:pointer; display:flex; flex-direction:column; gap:6px; font-family:var(--font-body);">
+                <span style="font:500 11px var(--font-body); letter-spacing:.14em; text-transform:uppercase; color:{{ t.tagC }};">{{ t.tag }}</span>
+                <span style="font-family:var(--font-heading); font-weight:500; font-size:18px; line-height:1;">{{ t.label }}</span>
+                <span style="font-size:15px; color:{{ t.sub }};">{{ t.price }}</span>
+              </button>
+            </sc-for>
+          </div>
+          <div style="display:flex; flex-wrap:wrap; align-items:flex-end; gap:16px;">
+            <label style="flex:0 1 240px; display:flex; flex-direction:column; gap:6px;"><span style="font:500 12px/1.2 var(--font-body); letter-spacing:.12em; text-transform:uppercase; color:var(--color-neutral-400);">Badge price I pay</span><input inputmode="decimal" value="{{ f.badge_price.value }}" onChange="{{ f.badge_price.on }}" style="width:100%; box-sizing:border-box; height:44px; padding:0 12px; border:1px solid var(--color-neutral-800); border-radius:var(--radius-md); font:500 16px var(--font-body); color:var(--color-text); background:var(--color-bg); outline:none;" style-focus="border-color:var(--color-accent-400);"></label>
+            <button onClick="{{ badgePaid.toggle }}" style="height:44px; padding:0 16px; border-radius:var(--radius-md); border:1px solid {{ badgePaid.border }}; background:{{ badgePaid.bg }}; color:{{ badgePaid.fg }}; font:500 12px var(--font-body); letter-spacing:.08em; text-transform:uppercase; cursor:pointer;">{{ badgePaid.label }}</button>
+          </div>
+          <p style="margin:0; font-size:14px; line-height:1.5; color:var(--color-neutral-400);">Tier prices are placeholders. Check the con's registration page for real prices.</p>
+        </div>
+        <div style="background:var(--color-surface); border:1px solid var(--color-neutral-800); border-radius:var(--radius-lg); padding:28px; display:flex; flex-direction:column; gap:20px;">
+          <h3 style="margin:0; font-family:var(--font-heading); font-weight:500; font-size:22px; line-height:1.12; color:var(--color-text);">Dealers' Den</h3>
+          <div style="display:flex; flex-wrap:wrap; align-items:flex-end; gap:16px 32px;">
+            <label style="flex:0 1 240px; display:flex; flex-direction:column; gap:6px;"><span style="font:500 12px/1.2 var(--font-body); letter-spacing:.12em; text-transform:uppercase; color:var(--color-neutral-400);">Total budget</span><input inputmode="decimal" value="{{ f.dealers.value }}" onChange="{{ f.dealers.on }}" style="width:100%; box-sizing:border-box; height:44px; padding:0 12px; border:1px solid var(--color-neutral-800); border-radius:var(--radius-md); font:500 16px var(--font-body); color:var(--color-text); background:var(--color-bg); outline:none;" style-focus="border-color:var(--color-accent-400);"></label>
+            <span style="font-size:16px; line-height:1.5; color:var(--color-neutral-400); padding-bottom:10px;">{{ dealersHint }}</span>
+          </div>
+        </div>
+        <div style="background:var(--color-surface); border:1px solid var(--color-neutral-800); border-radius:var(--radius-lg); padding:28px; display:flex; flex-direction:column; gap:16px;">
+          <h3 style="margin:0; font-family:var(--font-heading); font-weight:500; font-size:22px; line-height:1.12; color:var(--color-text);">Other one-off costs</h3>
+          <p style="margin:0; font-size:15px; line-height:1.5; color:var(--color-neutral-400);">Commissions, fursuit repairs, a group dinner, merch pre-orders. Set the split to share a cost.</p>
+          <sc-for list="{{ extraItems }}" as="it" hint-placeholder-count="0">
+            <div style="display:flex; flex-wrap:wrap; align-items:center; gap:10px; padding-top:12px; border-top:1px solid var(--color-neutral-800);">
+              <input value="{{ it.label }}" onChange="{{ it.onLabel }}" placeholder="What is it?" style="flex:2 1 200px; min-width:0; box-sizing:border-box; height:44px; padding:0 12px; border:1px solid var(--color-neutral-800); border-radius:var(--radius-md); font:500 16px var(--font-body); color:var(--color-text); background:var(--color-bg); outline:none;" style-focus="border-color:var(--color-accent-400);">
+              <input inputmode="decimal" value="{{ it.cost }}" onChange="{{ it.onCost }}" style="flex:1 1 100px; min-width:0; box-sizing:border-box; height:44px; padding:0 12px; border:1px solid var(--color-neutral-800); border-radius:var(--radius-md); font:500 16px var(--font-body); color:var(--color-text); background:var(--color-bg); outline:none;" style-focus="border-color:var(--color-accent-400);">
+              <input inputmode="numeric" value="{{ it.split }}" onChange="{{ it.onSplit }}" style="flex:0 1 80px; min-width:0; box-sizing:border-box; height:44px; padding:0 12px; border:1px solid var(--color-neutral-800); border-radius:var(--radius-md); font:500 16px var(--font-body); color:var(--color-text); background:var(--color-bg); outline:none;" style-focus="border-color:var(--color-accent-400);">
+              <span style="flex:0 0 100px; font-weight:600; color:var(--color-text);">{{ it.share }}</span>
+              <div style="flex:0 0 190px; display:flex; gap:8px; justify-content:flex-end;">
+                <button onClick="{{ it.toggle }}" style="height:38px; padding:0 14px; border-radius:var(--radius-md); border:1px solid {{ it.paidBorder }}; background:{{ it.paidBg }}; color:{{ it.paidFg }}; font:500 12px var(--font-body); letter-spacing:.08em; text-transform:uppercase; cursor:pointer;">{{ it.paidLabel }}</button>
+                <button onClick="{{ it.remove }}" style="height:38px; padding:0 10px; border:none; background:transparent; color:var(--color-neutral-400); font:500 12px var(--font-body); letter-spacing:.08em; text-transform:uppercase; cursor:pointer;" style-hover="color:var(--color-text);">Remove</button>
+              </div>
+            </div>
+          </sc-for>
+          <div style="display:flex; padding-top:12px; border-top:1px solid var(--color-neutral-800);">
+            <button onClick="{{ addExtra }}" class="btn btn-secondary" style="padding:10px 18px;">Add a cost</button>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- STEP 6: SAVINGS -->
+      <sc-if value="{{ isStep5 }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex; flex-direction:column; gap:10px;">
+          <span style="font:500 13px var(--font-body); letter-spacing:.18em; text-transform:uppercase; color:var(--color-accent-400);">Step 06 of 07</span>
+          <h2 style="margin:0; font-family:var(--font-heading); font-weight:500; font-size:clamp(28px,3.4vw,42px); line-height:1.12; color:var(--color-text);">Saving up</h2>
+          <p style="margin:0; font-size:17px; line-height:1.6; color:var(--color-neutral-400); max-width:62ch;">Tell us what you have now and when you'll set money aside. Costs you've already paid are left out of what you still need.</p>
+        </div>
+        <div style="background:var(--color-section); color:var(--color-text); border-radius:var(--radius-lg); padding:28px; display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:20px 32px;">
+          <div style="display:flex; flex-direction:column; gap:8px; min-width:0; flex:1 1 320px;">
+            <span style="font:500 12px var(--font-body); letter-spacing:.16em; text-transform:uppercase; color:var(--color-accent-400);">Suggested plan</span>
+            <span style="font-family:var(--font-heading); font-weight:500; font-size:clamp(26px,3vw,36px); line-height:1.12;">{{ suggestHead }}</span>
+            <span style="font-size:15px; line-height:1.5; color:var(--color-neutral-400);">{{ suggestSub }}</span>
+          </div>
+          <sc-if value="{{ canSuggest }}" hint-placeholder-val="{{ true }}">
+            <button onClick="{{ applySuggestion }}" class="btn btn-primary">Use this plan</button>
+          </sc-if>
+        </div>
+        <div style="background:var(--color-surface); border:1px solid var(--color-neutral-800); border-radius:var(--radius-lg); padding:28px; display:flex; flex-direction:column; gap:16px;">
+          <h3 style="margin:0; font-family:var(--font-heading); font-weight:500; font-size:22px; line-height:1.12; color:var(--color-text);">Money &amp; pay dates</h3>
+          <label style="display:flex; flex-direction:column; gap:6px; max-width:260px;"><span style="font:500 12px/1.2 var(--font-body); letter-spacing:.12em; text-transform:uppercase; color:var(--color-neutral-400);">Money I have now</span><input inputmode="decimal" value="{{ f.funds_now.value }}" onChange="{{ f.funds_now.on }}" style="width:100%; box-sizing:border-box; height:44px; padding:0 12px; border:1px solid var(--color-neutral-800); border-radius:var(--radius-md); font:500 16px var(--font-body); color:var(--color-text); background:var(--color-bg); outline:none;" style-focus="border-color:var(--color-accent-400);"></label>
+          <div style="display:flex; flex-wrap:wrap; gap:10px; padding-top:8px; font:500 12px var(--font-body); letter-spacing:.12em; text-transform:uppercase; color:var(--color-neutral-400);">
+            <span style="flex:1 1 180px;">Pay date</span><span style="flex:1 1 140px;">Set aside</span><span style="flex:0 0 100px;"></span>
+          </div>
+          <sc-for list="{{ planRows }}" as="r" hint-placeholder-count="5">
+            <div style="display:flex; flex-wrap:wrap; align-items:center; gap:10px; padding-top:12px; border-top:1px solid var(--color-neutral-800);">
+              <input type="month" value="{{ r.month }}" onChange="{{ r.onMonth }}" style="flex:1 1 180px; min-width:0; box-sizing:border-box; height:44px; padding:0 12px; border:1px solid var(--color-neutral-800); border-radius:var(--radius-md); font:500 16px var(--font-body); color:var(--color-text); background:var(--color-bg); outline:none;" style-focus="border-color:var(--color-accent-400);">
+              <input inputmode="decimal" value="{{ r.amount }}" onChange="{{ r.onAmount }}" style="flex:1 1 140px; min-width:0; box-sizing:border-box; height:44px; padding:0 12px; border:1px solid var(--color-neutral-800); border-radius:var(--radius-md); font:500 16px var(--font-body); color:var(--color-text); background:var(--color-bg); outline:none;" style-focus="border-color:var(--color-accent-400);">
+              <div style="flex:0 0 100px; display:flex; justify-content:flex-end;">
+                <button onClick="{{ r.remove }}" style="height:38px; padding:0 10px; border:none; background:transparent; color:var(--color-neutral-400); font:500 12px var(--font-body); letter-spacing:.08em; text-transform:uppercase; cursor:pointer;" style-hover="color:var(--color-text);">Remove</button>
+              </div>
+            </div>
+          </sc-for>
+          <div style="display:flex; flex-wrap:wrap; gap:12px; align-items:center; justify-content:space-between; padding-top:12px; border-top:1px solid var(--color-neutral-800);">
+            <button onClick="{{ addPlan }}" class="btn btn-secondary" style="padding:10px 18px;">Add a pay date</button>
+            <span style="font-size:16px; color:var(--color-text);">Total by the con: <strong style="color:var(--color-text);">{{ fundsTotalF }}</strong></span>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- STEP 7: OVERVIEW -->
+      <sc-if value="{{ isStep6 }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex; flex-direction:column; gap:10px;">
+          <span style="font:500 13px var(--font-body); letter-spacing:.18em; text-transform:uppercase; color:var(--color-accent-400);">Step 07 of 07</span>
+          <h2 style="margin:0; font-family:var(--font-heading); font-weight:500; font-size:clamp(28px,3.4vw,42px); line-height:1.12; color:var(--color-text);">Overview</h2>
+          <p style="margin:0; font-size:17px; line-height:1.6; color:var(--color-neutral-400); max-width:62ch;">Everything in one place. Tick costs off as you pay them.</p>
+        </div>
+        <div style="background:var(--color-surface); border:1px solid var(--color-neutral-800); border-radius:var(--radius-lg); padding:28px; display:flex; flex-direction:column; gap:14px;">
+          <h3 style="margin:0; font-family:var(--font-heading); font-weight:500; font-size:22px; line-height:1.12; color:var(--color-text);">Payment checklist</h3>
+          <div style="overflow-x:auto;">
+            <div style="min-width:620px; display:flex; flex-direction:column;">
+              <div style="display:grid; grid-template-columns:minmax(0,2fr) 110px 80px 110px 120px; gap:10px; padding-bottom:10px; font:500 11px var(--font-body); letter-spacing:.1em; text-transform:uppercase; color:var(--color-neutral-400);">
+                <span>Cost</span><span style="text-align:right;">Full cost</span><span style="text-align:right;">Split</span><span style="text-align:right;">My share</span><span></span>
+              </div>
+              <sc-for list="{{ oneOffs }}" as="o" hint-placeholder-count="6">
+                <div style="display:grid; grid-template-columns:minmax(0,2fr) 110px 80px 110px 120px; gap:10px; align-items:center; padding:10px 0; border-top:1px solid var(--color-neutral-800);">
+                  <span style="display:flex; flex-direction:column;"><span style="font-weight:600; color:var(--color-text);">{{ o.label }}</span><span style="font-size:13px; color:var(--color-neutral-400);">{{ o.group }}</span></span>
+                  <span style="text-align:right;">{{ o.full }}</span>
+                  <span style="text-align:right; color:var(--color-neutral-400);">{{ o.splitTxt }}</span>
+                  <span style="text-align:right; font-weight:600; color:var(--color-text);">{{ o.share }}</span>
+                  <button onClick="{{ o.toggle }}" style="justify-self:end; height:34px; padding:0 14px; border-radius:var(--radius-md); border:1px solid {{ o.paidBorder }}; background:{{ o.paidBg }}; color:{{ o.paidFg }}; font:500 12px var(--font-body); letter-spacing:.08em; text-transform:uppercase; cursor:pointer;">{{ o.paidLabel }}</button>
+                </div>
+              </sc-for>
+              <div style="display:grid; grid-template-columns:minmax(0,2fr) 110px 80px 110px 120px; gap:10px; align-items:center; padding:12px 0 0; border-top:2px solid var(--color-accent-700); font-weight:600; color:var(--color-text);">
+                <span>One-off total</span><span style="text-align:right;">{{ sumFullF }}</span><span></span><span style="text-align:right;">{{ sumShareF }}</span><span></span>
+              </div>
+            </div>
+          </div>
+          <p style="margin:0; font-size:15px; color:var(--color-neutral-400);">Splitting saves you <strong style="color:var(--color-text);">{{ savedF }}</strong>.</p>
+        </div>
+        <div style="background:var(--color-surface); border:1px solid var(--color-neutral-800); border-radius:var(--radius-lg); padding:28px; display:flex; flex-direction:column; gap:10px;">
+          <h3 style="margin:0 0 6px; font-family:var(--font-heading); font-weight:500; font-size:22px; line-height:1.12; color:var(--color-text);">Personal spending</h3>
+          <sc-for list="{{ personalRows }}" as="pr" hint-placeholder-count="6">
+            <div style="display:flex; justify-content:space-between; gap:12px; padding:8px 0; border-top:1px solid var(--color-neutral-800);"><span>{{ pr.label }}</span><span style="font-weight:600;">{{ pr.value }}</span></div>
+          </sc-for>
+          <div style="display:flex; justify-content:space-between; gap:12px; padding-top:12px; border-top:2px solid var(--color-accent-700); font-weight:600; color:var(--color-text);"><span>Personal total</span><span>{{ personalF }}</span></div>
+        </div>
+        <div style="display:flex; flex-wrap:wrap; gap:12px;">
+          <button onClick="{{ copyLink }}" class="btn btn-primary">{{ copyLabel }}</button>
+          <button onClick="{{ startOver }}" class="btn btn-secondary">Start over</button>
+        </div>
+      </sc-if>
+
+      <div style="display:flex; flex-wrap:wrap; justify-content:space-between; gap:12px; padding-top:8px;">
+        <sc-if value="{{ hasBack }}" hint-placeholder-val="{{ false }}">
+          <button onClick="{{ back }}" class="btn btn-secondary">Back</button>
+        </sc-if>
+        <span></span>
+        <sc-if value="{{ hasNext }}" hint-placeholder-val="{{ true }}">
+          <button onClick="{{ next }}" class="btn btn-primary">{{ nextLabel }}</button>
+        </sc-if>
+      </div>
+    </main>
+
+    <sc-if value="{{ showRail }}" hint-placeholder-val="{{ true }}">
+      <aside style="flex:1 1 300px; min-width:0; position:sticky; top:24px; display:flex; flex-direction:column; gap:12px;">
+        <div style="background:var(--color-surface); box-shadow:var(--shadow-sm); color:var(--color-text); border-radius:var(--radius-lg); padding:26px; display:flex; flex-direction:column; gap:18px;">
+          <div style="display:flex; flex-direction:column; gap:8px;">
+            <span style="font:500 12px var(--font-body); letter-spacing:.16em; text-transform:uppercase; color:var(--color-accent-400);">My trip total</span>
+            <span style="font-family:var(--font-heading); font-weight:500; font-size:40px; line-height:1.12;">{{ tripTotalF }}</span>
+            <span style="font-size:14px; color:var(--color-neutral-400);">{{ tripLocal }}</span>
+          </div>
+          <div style="display:flex; flex-direction:column;">
+            <sc-for list="{{ railRows }}" as="rr" hint-placeholder-count="6">
+              <div style="display:flex; justify-content:space-between; gap:12px; padding:9px 0; border-top:1px solid var(--color-divider); font-size:15px;">
+                <span style="color:var(--color-neutral-400);">{{ rr.label }}</span><span style="font-weight:600;">{{ rr.value }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+        <div style="background:{{ leftBg }}; color:var(--color-text); border-radius:var(--radius-lg); padding:22px 26px; display:flex; flex-direction:column; gap:6px;">
+          <span style="font:500 12px var(--font-body); letter-spacing:.16em; text-transform:uppercase;">{{ leftLabel }}</span>
+          <span style="font-family:var(--font-heading); font-weight:500; font-size:34px; line-height:1.12;">{{ leftF }}</span>
+          <span style="font-size:14px; line-height:1.4;">{{ leftNote }}</span>
+        </div>
+        <div style="background:var(--color-surface); border:1px solid var(--color-neutral-800); border-radius:var(--radius-lg); padding:18px 22px; display:flex; flex-direction:column; gap:12px;">
+          <span style="font-size:15px; line-height:1.4; color:var(--color-text);">{{ nextPay }}</span>
+          <button onClick="{{ copyLink }}" class="btn btn-secondary" style="justify-content:center; padding:10px 16px;">{{ copyLabel }}</button>
+          <span style="font-size:13px; line-height:1.4; color:var(--color-neutral-400);">Your plan saves automatically in this browser.</span>
+        </div>
+      </aside>
+    </sc-if>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;showRail&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Layout&quot;}, &quot;showCountdown&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Layout&quot;}, &quot;roundTo&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;options&quot;: [&quot;1&quot;, &quot;5&quot;, &quot;10&quot;, &quot;25&quot;], &quot;default&quot;: &quot;5&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Savings&quot;}}">
+class Component extends DCLogic {
+  static KEY = 'conBudgetPlanner.v1';
+  static STEPS = ['Convention', 'Hotel', 'Travel', 'Daily spending', 'Badge & extras', 'Savings', 'Overview'];
+  static CATS = [['food', 'Food (meals)'], ['drinks', 'Drinks / bar'], ['snacks', 'Snacks / coffee'], ['events', 'Events / tickets'], ['misc', 'Misc / other']];
+  static TYPES = [['travel', 'Travel day'], ['early', 'Early / extra day'], ['con', 'Con day']];
+  static MODES = [['car', 'Car', 'I drive. Fuel, tolls, parking.'], ['carpool', 'Carpool', 'I ride along and chip in.'], ['train', 'Train', 'Tickets and local transport.'], ['plane', 'Plane', 'Flights, bags, transfers.']];
+  static CONS = {
+    nfc: { name: 'NordicFuzzCon 2027', city: 'Malmö, Sweden', start: '2027-02-24', end: '2027-02-28', arrive: '2027-02-22', depart: '2027-03-01', cur: 'SEK', rate: '11.2', mode: 'car', badgePaid: true,
+      note: 'Dates from your budget sheet. Hotel, badge and travel prices are placeholders.',
+      carCfg: { distance: '900', usage: '4', price: '2.50', extra: '10', split: '2' },
+      car: [['Øresund Bridge toll (both ways)', 125, 2], ['Denmark crossing: bridge or ferry (both ways)', 150, 2], ['Parking in Malmö', 150, 2], ['Overnight stop on the way', 0, 2]],
+      hotels: [
+        { id: 'con', name: 'Clarion Hotel & Congress Malmö Live', tag: 'Con hotel', rooms: [{ id: 'single', label: 'Single', price: 115, ppl: 1 }, { id: 'double', label: 'Double', price: 129, ppl: 2 }, { id: 'family', label: 'Family room', price: 190, ppl: 4 }] },
+        { id: 'near', name: 'Hotel in Malmö city centre', tag: 'Nearby', rooms: [{ id: 'single', label: 'Single', price: 90, ppl: 1 }, { id: 'double', label: 'Double', price: 105, ppl: 2 }] },
+        { id: 'budget', name: 'Hostel or apartment', tag: 'Budget', rooms: [{ id: 'double', label: 'Private room', price: 70, ppl: 2 }, { id: 'family', label: 'Apartment', price: 140, ppl: 4 }] }],
+      tiers: [{ id: 'attendee', label: 'Attendee', price: 180 }, { id: 'sponsor', label: 'Sponsor', price: 300, up: true }, { id: 'super', label: 'Super Sponsor', price: 480, up: true }] },
+    ef: { name: 'Eurofurence 2027', city: 'Hamburg, Germany', start: '2027-08-25', end: '2027-08-29', arrive: '2027-08-24', depart: '2027-08-30', cur: 'EUR', rate: '1', mode: 'train',
+      note: 'Placeholder dates. Check eurofurence.org for the confirmed dates and prices.',
+      carCfg: { distance: '500', usage: '6', price: '1.90', extra: '10', split: '2' },
+      car: [['Parking in Hamburg', 120, 2]],
+      hotels: [
+        { id: 'con', name: 'Official con hotel (by the CCH)', tag: 'Con hotel', rooms: [{ id: 'single', label: 'Single', price: 150, ppl: 1 }, { id: 'double', label: 'Double', price: 170, ppl: 2 }] },
+        { id: 'near', name: 'Hotel near Dammtor', tag: 'Nearby', rooms: [{ id: 'single', label: 'Single', price: 110, ppl: 1 }, { id: 'double', label: 'Double', price: 130, ppl: 2 }] },
+        { id: 'budget', name: 'Hostel or apartment', tag: 'Budget', rooms: [{ id: 'double', label: 'Private room', price: 75, ppl: 2 }, { id: 'family', label: 'Apartment', price: 150, ppl: 4 }] }],
+      tiers: [{ id: 'attendee', label: 'Attendee', price: 140 }, { id: 'sponsor', label: 'Sponsor', price: 250, up: true }, { id: 'super', label: 'Super Sponsor', price: 450, up: true }] },
+    cfz: { name: 'ConFuzzled 2027', city: 'Birmingham, UK', start: '2027-05-28', end: '2027-05-31', arrive: '2027-05-27', depart: '2027-06-01', cur: 'GBP', rate: '0.86', mode: 'plane',
+      note: 'Placeholder dates. Check confuzzled.org.uk for the confirmed dates and prices.',
+      carCfg: { distance: '500', usage: '6', price: '1.90', extra: '10', split: '2' },
+      car: [['Channel crossing (both ways)', 200, 2], ['Parking', 100, 2]],
+      hotels: [
+        { id: 'con', name: 'Official con hotel (NEC)', tag: 'Con hotel', rooms: [{ id: 'single', label: 'Single', price: 140, ppl: 1 }, { id: 'double', label: 'Double', price: 155, ppl: 2 }] },
+        { id: 'near', name: 'Hotel near the NEC', tag: 'Nearby', rooms: [{ id: 'double', label: 'Double', price: 110, ppl: 2 }] }],
+      tiers: [{ id: 'attendee', label: 'Standard', price: 110 }, { id: 'sponsor', label: 'Sponsor', price: 190, up: true }, { id: 'super', label: 'Super Sponsor', price: 330, up: true }] },
+    custom: { name: 'My convention', city: 'Somewhere in Europe', start: '2027-06-10', end: '2027-06-13', arrive: '2027-06-09', depart: '2027-06-14', cur: 'EUR', rate: '1', mode: 'train',
+      note: 'Set your own name, city and dates. Every price starts at zero.',
+      carCfg: { distance: '300', usage: '6', price: '1.90', extra: '10', split: '1' },
+      car: [['Tolls', 0, 1], ['Parking', 0, 1]], hotels: [],
+      tiers: [{ id: 'attendee', label: 'Attendee', price: 0 }, { id: 'sponsor', label: 'Sponsor', price: 0, up: true }] }
+  };
+
+  state = { p: this.fresh('nfc'), step: 0, copied: false };
+
+  uid() { return 'i' + Math.random().toString(36).slice(2, 9); }
+
+  fresh(id) {
+    const d = () => ({ food: '50', drinks: '20', snacks: '0', events: '0', misc: '0' });
+    const plan = [['2026-10', '300'], ['2026-11', '325'], ['2026-12', '325'], ['2027-01', '325'], ['2027-02', '325']].map(([month, amount]) => ({ id: this.uid(), month, amount }));
+    return this.withPreset({ currency: 'EUR', defaults: { travel: d(), early: d(), con: d() }, dealers: '300', extras: [], funds: { now: '0', plan } }, id);
+  }
+
+  withPreset(p, id) {
+    const c = Component.CONS[id];
+    const h = c.hotels[0];
+    const room = h ? (h.rooms.find(r => r.id === 'double') || h.rooms[0]) : null;
+    const t = c.tiers[0];
+    const mk = arr => arr.map(([label, cost, split]) => ({ id: this.uid(), label, cost: String(cost), split: String(split), paid: false }));
+    return Object.assign({}, p, {
+      conId: id,
+      con: { name: c.name, city: c.city, start: c.start, end: c.end, cur: c.cur, rate: c.rate },
+      arrive: c.arrive, depart: c.depart,
+      hotel: { id: h ? h.id : 'custom', room: room ? room.id : '', name: '', price: String(room ? room.price : 0), split: String(room ? room.ppl : 1), paid: false },
+      mode: c.mode,
+      car: Object.assign({ paid: false }, c.carCfg),
+      travel: { car: mk(c.car), carpool: mk([['Contribution to the driver', 0, 1]]), train: mk([['Return train ticket', 0, 1], ['Local transport', 0, 1]]), plane: mk([['Return flight', 0, 1], ['Checked bag', 0, 1], ['Airport transfer', 0, 1]]) },
+      badge: { tier: t.id, price: String(t.price), paid: !!c.badgePaid },
+      overrides: {}, dayTypes: {}
+    });
+  }
+
+  componentDidMount() {
+    try {
+      const m = location.hash.match(/plan=([^&]+)/);
+      if (m) {
+        const p = JSON.parse(decodeURIComponent(escape(atob(decodeURIComponent(m[1])))));
+        this.setState({ p: this.merge(p), step: 6 });
+        history.replaceState(null, '', location.href.split('#')[0]);
+        return;
+      }
+      const raw = localStorage.getItem(Component.KEY);
+      if (raw) { const s = JSON.parse(raw); if (s && s.p) this.setState({ p: this.merge(s.p), step: s.step || 0 }); }
+    } catch (e) {}
+  }
+
+  componentDidUpdate() {
+    try { localStorage.setItem(Component.KEY, JSON.stringify({ p: this.state.p, step: this.state.step })); } catch (e) {}
+  }
+
+  merge(p) { return Object.assign(this.fresh(Component.CONS[p.conId] ? p.conId : 'nfc'), p); }
+
+  upd(fn) { this.setState(s => { const q = JSON.parse(JSON.stringify(s.p)); fn(q); return { p: q }; }); }
+
+  go(i) { this.setState({ step: i }); try { window.scrollTo({ top: 0, behavior: 'smooth' }); } catch (e) {} }
+
+  renderVals() {
+    const C = Component, p = this.state.p, step = this.state.step;
+    const n = v => { const x = parseFloat(String(v ?? '').replace(',', '.')); return isFinite(x) ? x : 0; };
+    const sp = v => Math.max(1, Math.round(n(v)) || 1);
+    const cur = p.currency;
+    let nf, nf0;
+    try { nf = new Intl.NumberFormat('en-GB', { style: 'currency', currency: cur, minimumFractionDigits: 2, maximumFractionDigits: 2 }); nf0 = new Intl.NumberFormat('en-GB', { style: 'currency', currency: cur, maximumFractionDigits: 0 }); }
+    catch (e) { nf = nf0 = new Intl.NumberFormat('en-GB', { minimumFractionDigits: 2 }); }
+    const fmt = x => nf.format(x), fmt0 = x => nf0.format(Math.round(x));
+    const rate = n(p.con.rate) || 1, showLocal = p.con.cur !== cur;
+    const loc = x => { if (!showLocal) return ''; try { return 'About ' + new Intl.NumberFormat('en-GB', { style: 'currency', currency: p.con.cur, maximumFractionDigits: 0 }).format(x * rate) + ' at the con'; } catch (e) { return ''; } };
+
+    const get = (o, path) => path.split('.').reduce((a, k) => a == null ? a : a[k], o);
+    const bind = path => ({ value: get(p, path) ?? '', on: e => { const v = e.target.value; this.upd(q => { const ks = path.split('.'); const last = ks.pop(); ks.reduce((a, k) => a[k], q)[last] = v; }); } });
+    const f = {};
+    ['con.name', 'con.city', 'con.start', 'con.end', 'con.cur', 'con.rate', 'arrive', 'depart', 'currency', 'hotel.name', 'hotel.price', 'hotel.split', 'car.distance', 'car.usage', 'car.price', 'car.extra', 'car.split', 'badge.price', 'dealers', 'funds.now'].forEach(k => { f[k.replace(/\./g, '_')] = bind(k); });
+
+    const sel = on => on ? { bg: 'var(--color-accent-900)', fg: 'var(--color-text)', sub: 'var(--color-accent-300)', border: 'var(--color-accent)', tagC: 'var(--color-accent-400)' } : { bg: 'var(--color-surface)', fg: 'var(--color-text)', sub: 'var(--color-neutral-400)', border: 'var(--color-neutral-800)', tagC: 'var(--color-accent-400)' };
+    const paidSty = (paid, toggle) => paid ? { label: 'Paid', bg: 'var(--color-accent-800)', fg: 'var(--color-accent-100)', border: 'var(--color-accent)', toggle } : { label: 'Not paid', bg: 'transparent', fg: 'var(--color-neutral-300)', border: 'var(--color-neutral-700)', toggle };
+
+    // dates
+    const DAY = 86400000;
+    const P = s => { const [y, m, d] = String(s || '').split('-').map(Number); return (y && m && d) ? Date.UTC(y, m - 1, d) : NaN; };
+    const a = P(p.arrive), b = P(p.depart), cs = P(p.con.start), ce = P(p.con.end);
+    const dayTs = [];
+    if (isFinite(a) && isFinite(b) && b >= a) for (let t = a, i = 0; t <= b && i < 31; t += DAY, i++) dayTs.push(t);
+    const last = dayTs.length - 1;
+    const dFmt = (t, o) => new Date(t).toLocaleDateString('en-GB', Object.assign({ timeZone: 'UTC' }, o));
+    const typeCount = { travel: 0, early: 0, con: 0 };
+    const catSum = {}; C.CATS.forEach(([k]) => { catSum[k] = 0; });
+    const dayRows = dayTs.map((t, i) => {
+      const iso = new Date(t).toISOString().slice(0, 10);
+      const auto = (i === 0 || i === last) ? 'travel' : (t >= cs && t <= ce ? 'con' : 'early');
+      const type = p.dayTypes[iso] || auto;
+      typeCount[type]++;
+      const ov = p.overrides[iso] || {};
+      const cells = C.CATS.map(([k]) => {
+        const has = ov[k] !== undefined;
+        const v = has ? ov[k] : p.defaults[type][k];
+        catSum[k] += n(v);
+        return { value: v, num: n(v), bg: has ? 'var(--color-accent-900)' : 'var(--color-bg)', border: has ? 'var(--color-accent)' : 'var(--color-neutral-800)', on: e => { const val = e.target.value; this.upd(q => { q.overrides[iso] = Object.assign({}, q.overrides[iso], { [k]: val }); }); } };
+      });
+      const total = cells.reduce((s, c) => s + c.num, 0);
+      return { label: dFmt(t, { weekday: 'short', day: 'numeric', month: 'short' }), type, onType: e => { const v = e.target.value; this.upd(q => { q.dayTypes[iso] = v; }); }, cells, totalF: fmt(total), hasOv: Object.keys(ov).length > 0 || !!p.dayTypes[iso], reset: () => this.upd(q => { delete q.overrides[iso]; delete q.dayTypes[iso]; }) };
+    });
+    const dailyTotal = C.CATS.reduce((s, [k]) => s + catSum[k], 0);
+    const nights = Math.max(0, dayTs.length - 1);
+    const conDayCount = typeCount.con;
+    const typeBoxes = C.TYPES.map(([k, label]) => {
+      const tot = C.CATS.reduce((s, [c]) => s + n(p.defaults[k][c]), 0);
+      return { label, count: typeCount[k] + (typeCount[k] === 1 ? ' day' : ' days'), total: fmt(tot), local: loc(tot),
+        fields: C.CATS.map(([c, cl]) => ({ label: cl, value: p.defaults[k][c], on: e => { const v = e.target.value; this.upd(q => { q.defaults[k][c] = v; }); } })) };
+    });
+
+    // con
+    const con = C.CONS[p.conId] || C.CONS.nfc;
+    const range = (isFinite(cs) && isFinite(ce)) ? dFmt(cs, { day: 'numeric', month: 'short' }) + ' to ' + dFmt(ce, { day: 'numeric', month: 'short', year: 'numeric' }) : 'Set your dates';
+    const conCards = Object.keys(C.CONS).map(id => {
+      const c = C.CONS[id];
+      return Object.assign({ name: id === 'custom' ? 'Custom con' : c.name, city: id === 'custom' ? 'Your own details' : c.city, dates: id === 'custom' ? 'Any dates' : dFmt(P(c.start), { day: 'numeric', month: 'short' }) + ' to ' + dFmt(P(c.end), { day: 'numeric', month: 'short', year: 'numeric' }),
+        pick: () => this.upd(q => { Object.assign(q, this.withPreset(q, id)); }) }, sel(p.conId === id));
+    });
+
+    // hotel
+    const hotels = con.hotels.concat([{ id: 'custom', name: 'Somewhere else', tag: 'Custom', rooms: [] }]);
+    const hsel = hotels.find(h => h.id === p.hotel.id) || hotels[hotels.length - 1];
+    const hotelOptions = hotels.map(h => Object.assign({ name: h.name, tag: h.tag, from: h.rooms.length ? 'From ' + fmt0(Math.min.apply(null, h.rooms.map(r => r.price))) + ' per night' : 'Enter your own name and price',
+      pick: () => this.upd(q => { q.hotel.id = h.id; if (h.rooms.length) { const r = h.rooms.find(r => r.id === q.hotel.room) || h.rooms[0]; q.hotel.room = r.id; q.hotel.price = String(r.price); q.hotel.split = String(r.ppl); } }) }, sel(h.id === hsel.id)));
+    const rooms = hsel.rooms.map(r => Object.assign({ label: r.label, meta: fmt0(r.price) + ' / night, ' + r.ppl + (r.ppl === 1 ? ' guest' : ' guests'), pick: () => this.upd(q => { q.hotel.room = r.id; q.hotel.price = String(r.price); q.hotel.split = String(r.ppl); }) }, sel(r.id === p.hotel.room)));
+    const hotelCost = nights * n(p.hotel.price), hotelSplit = sp(p.hotel.split);
+    const hotelName = hsel.id === 'custom' ? (p.hotel.name || 'Hotel') : hsel.name;
+
+    // travel
+    const km = n(p.car.distance) * 2 + n(p.car.extra), litres = km * n(p.car.usage) / 100, fuelCost = litres * n(p.car.price), fuelSplit = sp(p.car.split);
+    const listItems = (arrGet, group) => arrGet(p).map(it => {
+      const cost = n(it.cost), s = sp(it.split), ps = paidSty(it.paid);
+      const set = (k, v) => this.upd(q => { const x = arrGet(q).find(z => z.id === it.id); if (x) x[k] = v; });
+      return { id: it.id, label: it.label, cost: it.cost, split: it.split, costN: cost, splitN: s, share: fmt(cost / s), group, paid: it.paid,
+        paidLabel: ps.label, paidBg: ps.bg, paidFg: ps.fg, paidBorder: ps.border,
+        onLabel: e => set('label', e.target.value), onCost: e => set('cost', e.target.value), onSplit: e => set('split', e.target.value),
+        toggle: () => set('paid', !it.paid),
+        remove: () => this.upd(q => { const arr = arrGet(q); const i = arr.findIndex(z => z.id === it.id); if (i >= 0) arr.splice(i, 1); }) };
+    });
+    const mode = p.mode;
+    const modeLabel = (C.MODES.find(m => m[0] === mode) || C.MODES[0])[1];
+    const travelItems = listItems(q => q.travel[mode], 'Travel, ' + modeLabel.toLowerCase());
+    const extraItems = listItems(q => q.extras, 'Extra');
+
+    // one-offs
+    const oneOffs = [];
+    const add = (label, group, cost, s, paid, toggle) => { const ps = paidSty(paid, toggle); oneOffs.push({ label, group, cost, s, shareN: cost / s, paid, full: fmt(cost), splitTxt: s > 1 ? 'Split ' + s : 'Just me', share: fmt(cost / s), paidLabel: ps.label, paidBg: ps.bg, paidFg: ps.fg, paidBorder: ps.border, toggle }); };
+    if (mode === 'car') add('Fuel (round trip)', 'Travel, car', fuelCost, fuelSplit, p.car.paid, () => this.upd(q => { q.car.paid = !q.car.paid; }));
+    travelItems.forEach(it => add(it.label || 'Travel cost', it.group, it.costN, it.splitN, it.paid, it.toggle));
+    add(hotelName + ' (' + nights + (nights === 1 ? ' night)' : ' nights)'), 'Hotel', hotelCost, hotelSplit, p.hotel.paid, () => this.upd(q => { q.hotel.paid = !q.hotel.paid; }));
+    const tier = con.tiers.find(t => t.id === p.badge.tier) || con.tiers[0];
+    add('Badge: ' + tier.label, 'Registration', n(p.badge.price), 1, p.badge.paid, () => this.upd(q => { q.badge.paid = !q.badge.paid; }));
+    extraItems.forEach(it => add(it.label || 'Extra cost', 'Extra', it.costN, it.splitN, it.paid, it.toggle));
+
+    const sumFull = oneOffs.reduce((s, o) => s + o.cost, 0);
+    const sumShare = oneOffs.reduce((s, o) => s + o.shareN, 0);
+    const paidShare = oneOffs.reduce((s, o) => s + (o.paid ? o.shareN : 0), 0);
+    const dealers = n(p.dealers);
+    const personal = dailyTotal + dealers;
+    const tripTotal = personal + sumShare;
+    const stillToPay = tripTotal - paidShare;
+    const fundsNow = n(p.funds.now);
+    const planSum = p.funds.plan.reduce((s, r) => s + n(r.amount), 0);
+    const fundsTotal = fundsNow + planSum;
+    const left = fundsTotal - stillToPay;
+
+    // savings
+    const today = new Date(), tY = today.getFullYear(), tM = today.getMonth();
+    const ym = (y, m) => y + '-' + String(m + 1).padStart(2, '0');
+    const nowYM = ym(tY, tM);
+    const csD = new Date(cs);
+    const months = isFinite(cs) ? Math.max(1, (csD.getUTCFullYear() - tY) * 12 + (csD.getUTCMonth() - tM) + 1) : 1;
+    const round = n(this.props.roundTo ?? 5) || 1;
+    const needed = Math.max(0, stillToPay - fundsNow);
+    const monthly = Math.ceil(needed / months / round) * round;
+    const mLabel = s => { const [y, m] = String(s || '').split('-').map(Number); return (y && m) ? new Date(Date.UTC(y, m - 1, 1)).toLocaleDateString('en-GB', { month: 'short', year: 'numeric', timeZone: 'UTC' }) : 'No date'; };
+    const conMonth = isFinite(cs) ? ym(csD.getUTCFullYear(), csD.getUTCMonth()) : nowYM;
+    const futurePlanMonths = Math.max(1, p.funds.plan.filter(r => r.month >= nowYM && r.month <= conMonth).length);
+    const planRows = p.funds.plan.map(r => ({ month: r.month, amount: r.amount,
+      onMonth: e => { const v = e.target.value; this.upd(q => { const x = q.funds.plan.find(z => z.id === r.id); if (x) x.month = v; }); },
+      onAmount: e => { const v = e.target.value; this.upd(q => { const x = q.funds.plan.find(z => z.id === r.id); if (x) x.amount = v; }); },
+      remove: () => this.upd(q => { q.funds.plan = q.funds.plan.filter(z => z.id !== r.id); }) }));
+    const nextRow = p.funds.plan.filter(r => r.month >= nowYM && n(r.amount) > 0).sort((x, y) => x.month < y.month ? -1 : 1)[0];
+
+    const daysLeft = isFinite(cs) ? Math.ceil((cs - Date.UTC(tY, tM, today.getDate())) / DAY) : null;
+    const countdownNum = daysLeft == null ? '' : daysLeft > 0 ? String(daysLeft) : daysLeft === 0 ? 'Today' : 'Done';
+    const countdownLabel = daysLeft == null ? '' : daysLeft > 0 ? (daysLeft === 1 ? 'Day to go' : 'Days to go') : daysLeft === 0 ? 'Con starts' : 'Con is over';
+
+    const isShort = left < -0.005;
+    const extraPer = Math.ceil(-left / futurePlanMonths / round) * round;
+
+    const STEPS = C.STEPS;
+    const steps = STEPS.map((l, i) => ({ num: String(i + 1).padStart(2, '0'), label: l, go: () => this.go(i), bg: i === step ? 'var(--color-accent-900)' : 'transparent', fg: i === step ? 'var(--color-text)' : 'var(--color-neutral-300)', numC: i === step ? 'var(--color-accent-400)' : 'var(--color-neutral-500)', border: i === step ? 'var(--color-accent)' : 'var(--color-neutral-800)' }));
+
+    const copyLink = () => {
+      const enc = encodeURIComponent(btoa(unescape(encodeURIComponent(JSON.stringify(this.state.p)))));
+      const url = location.href.split('#')[0] + '#plan=' + enc;
+      const done = () => { this.setState({ copied: true }); clearTimeout(this._ct); this._ct = setTimeout(() => this.setState({ copied: false }), 2200); };
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(url).then(done).catch(() => window.prompt('Copy this link to share your plan', url));
+      else window.prompt('Copy this link to share your plan', url);
+    };
+
+    const railRows = [
+      { label: 'Daily spending', value: fmt(dailyTotal) },
+      { label: "Dealers' Den", value: fmt(dealers) },
+      { label: 'One-off costs (my share)', value: fmt(sumShare) },
+      { label: 'Already paid', value: fmt(paidShare) },
+      { label: 'Still to pay', value: fmt(stillToPay) },
+      { label: 'Money by the con', value: fmt(fundsTotal) }
+    ];
+
+    return {
+      f, steps, conName: p.con.name || 'My convention',
+      headerSub: (p.con.city ? p.con.city + ', ' : '') + range + (nights ? ', ' + nights + (nights === 1 ? ' night' : ' nights') : ''),
+      showCountdown: (this.props.showCountdown ?? true) && daysLeft != null, countdownNum, countdownLabel,
+      showRail: this.props.showRail ?? true,
+      isStep0: step === 0, isStep1: step === 1, isStep2: step === 2, isStep3: step === 3, isStep4: step === 4, isStep5: step === 5, isStep6: step === 6,
+      hasBack: step > 0, hasNext: step < STEPS.length - 1, nextLabel: step < STEPS.length - 1 ? 'Next: ' + STEPS[step + 1] : '',
+      back: () => this.go(Math.max(0, step - 1)), next: () => this.go(Math.min(STEPS.length - 1, step + 1)), goSavings: () => this.go(5),
+      // step 0
+      conCards, conNote: con.note, showLocal, rateLabel: '1 ' + cur + ' in ' + p.con.cur,
+      dayCount: String(dayTs.length), nights: String(nights), conDayCount: String(conDayCount),
+      // step 1
+      hotelOptions, rooms, hasRooms: rooms.length > 0, isCustomHotel: hsel.id === 'custom',
+      hotelCalc: nights + (nights === 1 ? ' night' : ' nights') + ' x ' + fmt(n(p.hotel.price)), hotelFull: fmt(hotelCost), hotelShare: fmt(hotelCost / hotelSplit),
+      hotelPaid: paidSty(p.hotel.paid, () => this.upd(q => { q.hotel.paid = !q.hotel.paid; })),
+      // step 2
+      modeCards: C.MODES.map(([id, label, desc]) => Object.assign({ label, desc, pick: () => this.upd(q => { q.mode = id; }) }, sel(mode === id))),
+      isCar: mode === 'car',
+      fuelCalc: Math.round(km).toLocaleString('en-GB') + ' km, ' + litres.toFixed(1) + ' litres', fuelFull: fmt(fuelCost), fuelShare: fmt(fuelCost / fuelSplit),
+      fuelPaid: paidSty(p.car.paid, () => this.upd(q => { q.car.paid = !q.car.paid; })),
+      travelListTitle: mode === 'car' ? 'Tolls, crossings & parking' : mode === 'carpool' ? 'What I chip in' : mode === 'train' ? 'Train costs' : 'Flight costs',
+      travelItems, addTravel: () => this.upd(q => { q.travel[q.mode].push({ id: this.uid(), label: '', cost: '0', split: '1', paid: false }); }),
+      travelSummary: 'Travel, my share: ' + fmt(oneOffs.filter(o => o.group.indexOf('Travel') === 0).reduce((s, o) => s + o.shareN, 0)),
+      // step 3
+      typeBoxes, dayRows, catTotals: C.CATS.map(([k]) => fmt(catSum[k])), dailyTotalF: fmt(dailyTotal),
+      // step 4
+      tierCards: con.tiers.map(t => Object.assign({ label: t.label, tag: t.up ? 'Sponsor upgrade' : 'Standard badge', price: fmt0(t.price), pick: () => this.upd(q => { q.badge.tier = t.id; q.badge.price = String(t.price); }) }, sel(t.id === tier.id))),
+      badgePaid: paidSty(p.badge.paid, () => this.upd(q => { q.badge.paid = !q.badge.paid; })),
+      dealersHint: conDayCount ? 'About ' + fmt(dealers / conDayCount) + ' per con day across ' + conDayCount + ' days.' : 'Set your trip dates to see a per-day amount.',
+      extraItems, addExtra: () => this.upd(q => { q.extras.push({ id: this.uid(), label: '', cost: '0', split: '1', paid: false }); }),
+      // step 5
+      canSuggest: needed > 0,
+      suggestHead: needed > 0 ? fmt0(monthly) + ' a month' : 'You are covered',
+      suggestSub: needed > 0 ? 'Set this aside each month from ' + mLabel(nowYM) + ' to ' + mLabel(conMonth) + ' (' + months + (months === 1 ? ' month' : ' months') + ') to cover ' + fmt(needed) + '.' : 'The money you have now already covers everything still to pay.',
+      applySuggestion: () => this.upd(q => { q.funds.plan = Array.from({ length: months }, (_, i) => { const d = new Date(tY, tM + i, 1); return { id: this.uid(), month: ym(d.getFullYear(), d.getMonth()), amount: String(monthly) }; }); }),
+      planRows, addPlan: () => this.upd(q => { const lastM = q.funds.plan.length ? q.funds.plan[q.funds.plan.length - 1].month : nowYM; const [y, m] = lastM.split('-').map(Number); const d = new Date(y, m, 1); q.funds.plan.push({ id: this.uid(), month: q.funds.plan.length ? ym(d.getFullYear(), d.getMonth()) : nowYM, amount: '0' }); }),
+      fundsTotalF: fmt(fundsTotal),
+      // step 6
+      oneOffs, sumFullF: fmt(sumFull), sumShareF: fmt(sumShare), savedF: fmt(sumFull - sumShare),
+      personalRows: C.CATS.map(([k, l]) => ({ label: l, value: fmt(catSum[k]) })).concat([{ label: "Dealers' Den", value: fmt(dealers) }]),
+      personalF: fmt(personal),
+      copyLink, copyLabel: this.state.copied ? 'Link copied' : 'Copy share link',
+      startOver: () => { if (window.confirm('Start over? This clears your plan in this browser.')) this.setState({ p: this.fresh('nfc'), step: 0 }); },
+      // rail
+      tripTotalF: fmt(tripTotal), tripLocal: loc(tripTotal), railRows,
+      leftBg: isShort ? 'oklch(0.38 0.1 25)' : 'var(--color-section)', leftLabel: isShort ? 'Short by' : 'Left over after the trip', leftF: fmt(Math.abs(left)),
+      leftNote: isShort ? 'Add about ' + fmt0(extraPer) + ' per remaining pay date, or trim your budget.' : 'Your savings cover the trip.',
+      isShort, shortText: 'Your savings fall ' + fmt(-left) + ' short. Add about ' + fmt0(extraPer) + ' to each remaining pay date to cover it.',
+      nextPay: nextRow ? 'Next pay date: ' + mLabel(nextRow.month) + ', set aside ' + fmt(n(nextRow.amount)) + '.' : 'No upcoming pay dates planned.'
+    };
+  }
+}
+</script>
+</body>
+</html>

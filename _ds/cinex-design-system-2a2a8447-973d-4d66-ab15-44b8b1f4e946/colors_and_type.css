@@ -1,0 +1,215 @@
+/* ============================================================
+   CINEX — Curaçao Investment & Export Promotion Agency
+   Core design tokens: color + typography
+   Import this file into any CINEX artifact.
+   ------------------------------------------------------------
+   Fonts: Headlines use ACUMIN PRO WIDE (Adobe, paid — will NOT
+   load in a browser). Fallback order is built into the var below.
+   Body uses ARCHIVO. Both fallbacks load from Google Fonts.
+   ============================================================ */
+
+/* Body family "Archivo" is self-hosted from /fonts (user-uploaded TTFs).
+   Display families "Archivo Expanded" + "Anton" stay on Google Fonts — no local files. */
+@import url('https://fonts.googleapis.com/css2?family=Archivo+Expanded:wght@400;500;600;700;800;900&family=Anton&display=swap');
+
+@font-face { font-family:"Archivo"; font-style:normal; font-weight:100; font-display:swap; src:url("fonts/Archivo-Thin.ttf") format("truetype"); }
+@font-face { font-family:"Archivo"; font-style:italic; font-weight:100; font-display:swap; src:url("fonts/Archivo-ThinItalic.ttf") format("truetype"); }
+@font-face { font-family:"Archivo"; font-style:normal; font-weight:200; font-display:swap; src:url("fonts/Archivo-ExtraLight.ttf") format("truetype"); }
+@font-face { font-family:"Archivo"; font-style:normal; font-weight:300; font-display:swap; src:url("fonts/Archivo-Light.ttf") format("truetype"); }
+@font-face { font-family:"Archivo"; font-style:italic; font-weight:300; font-display:swap; src:url("fonts/Archivo-LightItalic.ttf") format("truetype"); }
+@font-face { font-family:"Archivo"; font-style:normal; font-weight:400; font-display:swap; src:url("fonts/Archivo-Regular.ttf") format("truetype"); }
+@font-face { font-family:"Archivo"; font-style:italic; font-weight:400; font-display:swap; src:url("fonts/Archivo-Italic.ttf") format("truetype"); }
+@font-face { font-family:"Archivo"; font-style:normal; font-weight:500; font-display:swap; src:url("fonts/Archivo-Medium.ttf") format("truetype"); }
+@font-face { font-family:"Archivo"; font-style:italic; font-weight:500; font-display:swap; src:url("fonts/Archivo-MediumItalic.ttf") format("truetype"); }
+@font-face { font-family:"Archivo"; font-style:normal; font-weight:600; font-display:swap; src:url("fonts/Archivo-SemiBold.ttf") format("truetype"); }
+@font-face { font-family:"Archivo"; font-style:italic; font-weight:600; font-display:swap; src:url("fonts/Archivo-SemiBoldItalic.ttf") format("truetype"); }
+@font-face { font-family:"Archivo"; font-style:normal; font-weight:700; font-display:swap; src:url("fonts/Archivo-Bold.ttf") format("truetype"); }
+@font-face { font-family:"Archivo"; font-style:italic; font-weight:800; font-display:swap; src:url("fonts/Archivo-ExtraBoldItalic.ttf") format("truetype"); }
+@font-face { font-family:"Archivo"; font-style:normal; font-weight:900; font-display:swap; src:url("fonts/Archivo-Black.ttf") format("truetype"); }
+
+/* ---- ACUMIN PRO WIDE (display) — self-hosted from user-uploaded OTFs ---- */
+@font-face { font-family:"Acumin Pro Wide"; font-style:normal; font-weight:100; font-display:swap; src:url("fonts/Acumin_Pro_Wide_Thin.otf") format("opentype"); }
+@font-face { font-family:"Acumin Pro Wide"; font-style:italic; font-weight:100; font-display:swap; src:url("fonts/Acumin_Pro_Wide_Thin_Italic.otf") format("opentype"); }
+@font-face { font-family:"Acumin Pro Wide"; font-style:normal; font-weight:200; font-display:swap; src:url("fonts/Acumin_Pro_Wide_Extra_Light.otf") format("opentype"); }
+@font-face { font-family:"Acumin Pro Wide"; font-style:italic; font-weight:200; font-display:swap; src:url("fonts/Acumin_Pro_Wide_Extra_Light_Italic.otf") format("opentype"); }
+@font-face { font-family:"Acumin Pro Wide"; font-style:normal; font-weight:300; font-display:swap; src:url("fonts/Acumin_Pro_Wide_Light.otf") format("opentype"); }
+@font-face { font-family:"Acumin Pro Wide"; font-style:italic; font-weight:300; font-display:swap; src:url("fonts/Acumin_Pro_Wide_Light_Italic.otf") format("opentype"); }
+@font-face { font-family:"Acumin Pro Wide"; font-style:normal; font-weight:400; font-display:swap; src:url("fonts/Acumin_Pro_Wide.otf") format("opentype"); }
+@font-face { font-family:"Acumin Pro Wide"; font-style:italic; font-weight:400; font-display:swap; src:url("fonts/Acumin_Pro_Wide_Italic.otf") format("opentype"); }
+@font-face { font-family:"Acumin Pro Wide"; font-style:normal; font-weight:500; font-display:swap; src:url("fonts/Acumin_Pro_Wide_Medium.otf") format("opentype"); }
+@font-face { font-family:"Acumin Pro Wide"; font-style:italic; font-weight:500; font-display:swap; src:url("fonts/Acumin_Pro_Wide_Medium_Italic.otf") format("opentype"); }
+@font-face { font-family:"Acumin Pro Wide"; font-style:normal; font-weight:600; font-display:swap; src:url("fonts/Acumin_Pro_Wide_Semibold.otf") format("opentype"); }
+@font-face { font-family:"Acumin Pro Wide"; font-style:italic; font-weight:600; font-display:swap; src:url("fonts/Acumin_Pro_Wide_Semibold_Italic.otf") format("opentype"); }
+@font-face { font-family:"Acumin Pro Wide"; font-style:normal; font-weight:700; font-display:swap; src:url("fonts/Acumin_Pro_Wide_Bold.otf") format("opentype"); }
+@font-face { font-family:"Acumin Pro Wide"; font-style:italic; font-weight:700; font-display:swap; src:url("fonts/Acumin_Pro_Wide_Bold_Italic.otf") format("opentype"); }
+@font-face { font-family:"Acumin Pro Wide"; font-style:normal; font-weight:800; font-display:swap; src:url("fonts/Acumin_Pro_Wide_Black.otf") format("opentype"); }
+@font-face { font-family:"Acumin Pro Wide"; font-style:italic; font-weight:800; font-display:swap; src:url("fonts/Acumin_Pro_Wide_Black_Italic.otf") format("opentype"); }
+/* 900 maps to Ultra Black — the brand's big-headline weight */
+@font-face { font-family:"Acumin Pro Wide"; font-style:normal; font-weight:900; font-display:swap; src:url("fonts/Acumin_Pro_Wide_Ultra_Black.otf") format("opentype"); }
+@font-face { font-family:"Acumin Pro Wide"; font-style:italic; font-weight:900; font-display:swap; src:url("fonts/Acumin_Pro_Wide_Ultra_Black_Italic.otf") format("opentype"); }
+
+:root {
+  /* ---- PRIMARY BRAND ---- */
+  --cx-navy:   #1A3080;  /* base for text + dark fields           */
+  --cx-blue:   #3A5FD9;  /* bright accent + gradient end          */
+  --cx-gold:   #F5BC00;  /* accent, CTA, highlights — NOT body    */
+
+  /* ---- NEUTRALS ---- */
+  --cx-black:  #1A1A1A;  /* text on light, black logo variant     */
+  --cx-stone:  #F2F2F0;  /* stone / off-white light field         */
+  --cx-white:  #FFFFFF;  /* pure white fields, logo clear space   */
+
+  /* ---- SECTION / MOOD PANELS (large background fields only) ----
+     From the brand book. Never layer over the blue/gold gradient. */
+  --cx-green:  #4E9E48;  /* sampled from official green hexagon/pattern */
+  --cx-purple: #663FA5;  /* sampled from official purple hexagon       */
+
+  /* ---- THE GRADIENT (Navy -> Blue, the CINEX signature) ---- */
+  --cx-gradient: linear-gradient(115deg, var(--cx-navy) 0%, var(--cx-blue) 100%);
+  /* Gold gradient — used ALONE, never mixed with the blue one.
+     Sampled from the official gold hexagon/pattern assets. */
+  --cx-gradient-gold: linear-gradient(120deg, #E09143 0%, #EBAC44 50%, #F5C644 100%); /* @kind color */
+
+  /* ---- SEMANTIC COLOR ROLES ---- */
+  --cx-bg:          var(--cx-white);
+  --cx-bg-alt:      var(--cx-stone);
+  --cx-bg-dark:     var(--cx-navy);
+  --cx-fg:          var(--cx-black);   /* primary text on light  */
+  --cx-fg-muted:    #5A5E6B;           /* secondary text on light */
+  --cx-fg-on-dark:  var(--cx-white);   /* text on navy/blue/photo */
+  --cx-fg-on-dark-muted: #B9C2E6;
+  --cx-accent:      var(--cx-gold);
+  --cx-link:        var(--cx-blue);
+  --cx-border:      #DBDBD7;           /* hairline on light       */
+  --cx-border-dark: rgba(255,255,255,.18);
+
+  /* ============================================================
+     TYPOGRAPHY
+     ============================================================ */
+
+  /* Display / headlines — must always render WIDE, ULTRA-HEAVY, UPPERCASE.
+     If this renders thin or narrow, the wrong font loaded — escalate weight. */
+  --cx-font-display: "Acumin Pro Wide", "Archivo Expanded", "Anton", "Arial Narrow", sans-serif;
+  /* Body */
+  --cx-font-body: "Archivo", "Inter", "Helvetica Neue", Arial, sans-serif;
+
+  /* Weights */
+  --cx-w-light: 300;   /* @kind font */
+  --cx-w-regular: 400; /* @kind font */
+  --cx-w-medium: 500;  /* @kind font */
+  --cx-w-bold: 700;    /* @kind font */
+  --cx-w-black: 900;   /* @kind font */
+
+  /* Type scale (display sizes assume large-format / hero use) */
+  --cx-text-xs:   12px;
+  --cx-text-sm:   14px;
+  --cx-text-base: 17px;
+  --cx-text-lg:   20px;
+  --cx-text-xl:   26px;
+  --cx-text-2xl:  34px;
+  --cx-text-3xl:  46px;
+  --cx-text-4xl:  64px;
+  --cx-text-5xl:  88px;
+  --cx-text-6xl:  120px;
+
+  /* ---- SPACING (4px base) ---- */
+  --cx-space-1: 4px;
+  --cx-space-2: 8px;
+  --cx-space-3: 12px;
+  --cx-space-4: 16px;
+  --cx-space-5: 24px;
+  --cx-space-6: 32px;
+  --cx-space-7: 48px;
+  --cx-space-8: 64px;
+  --cx-space-9: 96px;
+  --cx-space-10: 128px;
+
+  /* ---- RADII ----
+     Echo the mark's hexagon: gently, subtly rounded corners — never sharp,
+     never heavily rounded. Restrained and structural. */
+  --cx-radius-xs: 3px;
+  --cx-radius-sm: 6px;
+  --cx-radius-md: 10px;
+  --cx-radius-lg: 16px;
+  --cx-radius-pill: 999px;
+
+  /* ---- ELEVATION ---- (soft, sparse; the brand is flat & structural) */
+  --cx-shadow-sm: 0 1px 2px rgba(26,48,128,.08);
+  --cx-shadow-md: 0 6px 20px rgba(26,48,128,.10);
+  --cx-shadow-lg: 0 18px 48px rgba(26,48,128,.16);
+}
+
+/* ============================================================
+   SEMANTIC ELEMENT STYLES — opt in by adding class cx-scope
+   (or apply tokens directly). Keeps headlines on-brand.
+   ============================================================ */
+.cx-scope {
+  font-family: var(--cx-font-body);
+  font-weight: var(--cx-w-medium);
+  color: var(--cx-fg);
+  background: var(--cx-bg);
+  font-size: var(--cx-text-base);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+.cx-display,
+.cx-scope h1, .cx-scope h2, .cx-scope h3 {
+  font-family: var(--cx-font-display);
+  font-weight: var(--cx-w-black);
+  text-transform: uppercase;
+  line-height: 0.94;
+  letter-spacing: -0.005em;
+  font-stretch: expanded; /* nudges the variable Archivo wider */
+}
+
+.cx-scope h1 { font-size: var(--cx-text-5xl); }
+.cx-scope h2 { font-size: var(--cx-text-3xl); }
+.cx-scope h3 { font-size: var(--cx-text-xl); letter-spacing: 0; }
+
+/* A lighter, airy display variant (Acumin Light feel) */
+.cx-display-light {
+  font-family: var(--cx-font-display);
+  font-weight: var(--cx-w-light);
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+}
+
+.cx-eyebrow {
+  font-family: var(--cx-font-body);
+  font-weight: var(--cx-w-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: var(--cx-text-sm);
+  color: var(--cx-gold);
+}
+
+.cx-scope p { max-width: 68ch; }
+.cx-scope strong { font-weight: var(--cx-w-bold); }
+.cx-scope a { color: var(--cx-link); text-decoration: none; }
+.cx-scope a:hover { text-decoration: underline; }
+
+/* Buttons */
+.cx-btn {
+  font-family: var(--cx-font-body);
+  font-weight: var(--cx-w-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: var(--cx-text-sm);
+  padding: 14px 28px;
+  border-radius: var(--cx-radius-sm);
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  white-space: nowrap;
+  transition: transform .12s ease, filter .12s ease, background .12s ease;
+}
+.cx-btn:active { transform: translateY(1px); }
+.cx-btn-gold { background: var(--cx-gold); color: var(--cx-navy); }
+.cx-btn-gold:hover { filter: brightness(1.05); }
+.cx-btn-navy { background: var(--cx-navy); color: var(--cx-white); }
+.cx-btn-navy:hover { background: var(--cx-blue); }
+.cx-btn-ghost { background: transparent; color: var(--cx-navy); box-shadow: inset 0 0 0 2px var(--cx-navy); }
+.cx-btn-ghost:hover { background: var(--cx-navy); color: var(--cx-white); }

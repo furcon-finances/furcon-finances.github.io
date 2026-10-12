@@ -1,0 +1,10 @@
+/* ============================================================
+   CINEX Design System — canonical entry point.
+   Link or @import THIS file and you get every CINEX token,
+   the self-hosted fonts, and the base semantic styles.
+   ------------------------------------------------------------
+   Component-scoped sheets (preview/card.css, ui_kits/website/
+   site.css) each @import colors_and_type.css on their own, so
+   they are not re-imported here.
+   ============================================================ */
+@import url('colors_and_type.css');
