@@ -45,6 +45,7 @@
       async createGroup(g) { const id = rid(); const ng = { id, name: g.name, con: g.con, code: 'G-' + Math.random().toString(36).slice(2, 8).toUpperCase() }; groups.push(ng); db[id] = { members: [{ user_id: me.id, name: me.name, saved: 0, goal: 0 }], costs: [], settlements: [], events: [] }; ev(id, 'joined', 'started the group'); return ng; },
       async joinGroup(code) { const g = groups.find(x => x.code === code.trim().toUpperCase()); if (!g) throw new Error('No group with that code. In the demo, try G-7Q2K4M.'); return g; },
       async loadGroup(gid) { return copy(db[gid]); },
+      async leaveGroup(gid) { const i = groups.findIndex(g => g.id === gid); if (i >= 0) groups.splice(i, 1); delete db[gid]; delete subs[gid]; },
       async addCost(gid, c, text) { db[gid].costs.push(Object.assign({ id: rid(), created_at: iso() }, c)); ev(gid, 'cost', text || 'added ' + c.label); },
       async updateCost(gid, id, patch) { const c = db[gid].costs.find(x => x.id === id); Object.assign(c, patch); emit(gid); },
       async deleteCost(gid, id) { db[gid].costs = db[gid].costs.filter(x => x.id !== id); emit(gid); },
@@ -66,6 +67,7 @@
       async init() { const s = chk(await sb.auth.getSession()); user = s.session ? s.session.user : null; if (user) await api._profile(); return api.me(); },
       me() { return user ? { id: user.id, email: user.email, name } : null; },
       async _profile() { const d = chk(await sb.from('profiles').select('name').eq('id', user.id).maybeSingle()); name = d ? d.name || '' : ''; },
+      async signInGuest() { const d = chk(await sb.auth.signInAnonymously()); user = d.user; await api._profile(); return api.me(); },
       async signIn(email, password) { const d = chk(await sb.auth.signInWithPassword({ email, password })); user = d.user; await api._profile(); return api.me(); },
       async signUp(email, password) {
         const d = chk(await sb.auth.signUp({ email, password }));
@@ -77,6 +79,7 @@
       async listGroups() { return chk(await sb.from('members').select('group:groups(id,name,con,code)').eq('user_id', user.id)).map(r => r.group).filter(Boolean); },
       async createGroup(g) { return chk(await sb.rpc('create_group', { p_name: g.name, p_con: g.con, p_member_name: name })); },
       async joinGroup(code) { return chk(await sb.rpc('join_group', { p_code: code.trim().toUpperCase(), p_member_name: name })); },
+      async leaveGroup(gid) { chk(await sb.rpc('leave_group', { p_group: gid })); },
       async loadGroup(gid) {
         const [m, c, s, e] = await Promise.all([
           sb.from('members').select('*').eq('group_id', gid),

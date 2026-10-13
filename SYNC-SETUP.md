@@ -11,21 +11,28 @@ You only do this once. Friends who join through your invite link don't need to d
 1. In your project, open **SQL Editor** → **New query**.
 2. Paste everything from `supabase-setup.sql` and press **Run**. It should say "Success".
 
-## 3. Turn off email confirmation
-The app signs in with email + password, so no emails are needed.
-1. Open **Authentication** → **Sign In / Providers** → **Email**.
-2. Make sure **Enable Email provider** is on.
-3. Turn **Confirm email** off and save.
-4. Under **Authentication** → **URL Configuration**, set **Site URL** to your GitHub Pages address.
+## 3. Allow joining with just a code
+1. Open **Authentication** → **Sign In / Providers**.
+2. Turn on **Allow anonymous sign-ins** and save.
 
-## 4. Connect the app
+That's it: nobody needs an email or password. Everyone shows up with the nickname they typed when they first opened the app.
+
+## 4. Connect the app (once, for everyone)
 1. In Supabase, open **Project Settings** → **API**.
 2. Copy the **Project URL** and the **anon public** key.
-3. In the planner, open **Friends** → **Set up sync**, paste both, tap **Connect**.
-4. Tap **Create account** with your email and a password. Next time, use **Sign in**.
+3. Open `sync-config.js` in your GitHub repo, paste them between the quotes, and commit.
+
+```js
+window.CON_SYNC = {
+  url: 'https://xxxx.supabase.co',
+  key: 'eyJhbGciOi...'
+};
+```
 
 ## 5. Invite friends
-Create a group (Room, Car, Dinner…) and tap **Invite**. Send the link in Telegram or Discord, or just tell them the code. The link includes your connection details, so they only need to sign in.
+Create a group (Room, Car, Dinner…) on the Friends tab and send the code (like G-7Q2K4M) in Telegram or Discord. Friends open the app, go to Friends, type the code and tap **Join**.
+
+Good to know: a code-only account lives on that one phone. If someone changes phones, they just join their groups again with the codes.
 
 Notes
 - The anon key is meant to be public; your data is protected by the rules in the SQL file (only group members can see a group).
