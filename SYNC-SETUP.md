@@ -11,19 +11,18 @@ You only do this once. Friends who join through your invite link don't need to d
 1. In your project, open **SQL Editor** → **New query**.
 2. Paste everything from `supabase-setup.sql` and press **Run**. It should say "Success".
 
-## 3. Turn on email sign-in codes
-Sign-in links open in Safari instead of the Home Screen app on iPhone, so the app uses a 6-digit code instead.
-1. Open **Authentication** → **Emails** (or **Email Templates**) → **Magic Link**.
-2. Replace the message body with something like:
-   `Your Con Budget code is {{ .Token }}`
-3. Save. Do the same for **Confirm signup** so first-time sign-ins also get a code.
+## 3. Turn off email confirmation
+The app signs in with email + password, so no emails are needed.
+1. Open **Authentication** → **Sign In / Providers** → **Email**.
+2. Make sure **Enable Email provider** is on.
+3. Turn **Confirm email** off and save.
 4. Under **Authentication** → **URL Configuration**, set **Site URL** to your GitHub Pages address.
 
 ## 4. Connect the app
 1. In Supabase, open **Project Settings** → **API**.
 2. Copy the **Project URL** and the **anon public** key.
 3. In the planner, open **Friends** → **Set up sync**, paste both, tap **Connect**.
-4. Sign in with your email and the code you receive.
+4. Tap **Create account** with your email and a password. Next time, use **Sign in**.
 
 ## 5. Invite friends
 Create a group (Room, Car, Dinner…) and tap **Invite**. Send the link in Telegram or Discord, or just tell them the code. The link includes your connection details, so they only need to sign in.
